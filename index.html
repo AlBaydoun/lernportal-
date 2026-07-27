@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lernportal – Klasse 4 &amp; 5</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<div class="bg-shapes">
+  <span class="shape s1">➗</span><span class="shape s2">📚</span><span class="shape s3">✏️</span>
+  <span class="shape s4">🔢</span><span class="shape s5">🌍</span><span class="shape s6">⭐</span>
+  <span class="shape s7">🧪</span><span class="shape s8">🏆</span>
+</div>
+
+<header id="topbar">
+  <div class="brand" onclick="goHome()">
+    <span class="logo3d">🎓</span>
+    <div class="brand-txt">
+      <b data-i18n="appTitle">Lernportal</b>
+      <small data-i18n="appSub">Klasse 4 → 5 · Realschule Lise Meitner</small>
+    </div>
+  </div>
+  <div class="top-right">
+    <div class="credit-chip" id="creditChip" title="Credits">
+      <span class="coin">🪙</span><span id="creditVal">0</span> <span data-i18n="min">Min</span>
+    </div>
+    <div class="lang-switch" id="langSwitch">
+      <button data-lang="de" class="lbtn">🇩🇪</button>
+      <button data-lang="ru" class="lbtn">🇷🇺</button>
+      <button data-lang="en" class="lbtn">🇬🇧</button>
+    </div>
+    <button class="gear" id="adminBtn" title="Admin">⚙️</button>
+  </div>
+</header>
+
+<main id="app"></main>
+
+<div id="modalWrap" class="modal-wrap hidden">
+  <div class="modal" id="modalBox"></div>
+</div>
+
+<canvas id="confetti"></canvas>
+
+<script src="js/i18n.js"></script>
+<script src="js/helplib.js"></script>
+<script src="js/gen.js"></script>
+<script src="js/data_math.js"></script>
+<script src="js/data_german.js"></script>
+<script src="js/data_english.js"></script>
+<script src="js/data_other.js"></script>
+<script src="js/app.js"></script>
+<script src="js/admin.js"></script>
+</body>
+</html>
