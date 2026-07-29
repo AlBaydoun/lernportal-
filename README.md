@@ -16,7 +16,8 @@ All progress, results and credits are saved automatically in that browser (local
   - **Klasse 4:** Mathematik (16 tests, incl. 3 full "Lernzielkontrollen" with the 7-task structure), Deutsch (12), Englisch (5), Sachunterricht (6)
   - **Klasse 5 (Realschule NRW):** Mathematik (10), Deutsch (9), Englisch (8), **Informatik (4)**, Biologie (5), Erdkunde (4)
 - **Instant feedback:** after each task he presses "Prüfen" and immediately sees ✔ right / ✘ wrong (but never the solution — that stays admin-only).
-- **📚 Erklärung & 🎬 button on every test card:** full explanation of all topics in the test (DE/RU/EN) plus real YouTube explainer videos in German and Russian (Lehrerschmidt & co.), with "find more videos" search links.
+- **📚 Erklärung & 🎬 button on every test card:** full explanation of all topics in the test (DE/RU/EN) plus hand-verified YouTube videos in German and Russian that explain exactly that lesson (Lehrerschmidt, Инфоурок & co.). Topics without an exact matching video show the written explanation only — no generic links.
+- **⏱ Daily practice timer:** the blue chip shows how many minutes he practised **today** (counts only while he is actively using the site; resets automatically at midnight). The admin panel's **📅 Tagebuch** tab keeps the full history: per day it shows practice time, every test taken with score/attempt/help usage, plus an auto-generated conclusion — his wins (≥80 %) and the exact topics where he lost the most points ("noch üben").
 - **Math tests are generated with fresh numbers on every attempt** (🎲 badge) — so he can never memorise answers.
 - **3 languages:** German (main) 🇩🇪, Russian 🇷🇺, English 🇬🇧 — switch at the top right. Every question also has a 🌐 translation button.
 - **💡 Help button on every question** — explains HOW to solve that type of task (in all 3 languages), but **never shows the answer**.

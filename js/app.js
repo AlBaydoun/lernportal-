@@ -9,13 +9,40 @@ const MAX_ATTEMPTS = 2;
 function enc(s){ return btoa(unescape(encodeURIComponent(s))); }
 function dec(s){ return decodeURIComponent(escape(atob(s))); }
 function defaultState(){
-  return { lang:'de', results:[], attempts:{}, extra:{}, adminPw:enc('lise2026'), adj:[] };
+  return { lang:'de', results:[], attempts:{}, extra:{}, adminPw:enc('lise2026'), adj:[], days:{} };
 }
 let S;
 try { S = JSON.parse(dec(localStorage.getItem(LS_KEY))); if(!S || !S.results) S = defaultState(); }
 catch(e){ S = defaultState(); }
+if(!S.days) S.days = {};
 function save(){ try{ localStorage.setItem(LS_KEY, enc(JSON.stringify(S))); }catch(e){} }
 LANG = S.lang || 'de';
+
+/* ---------- daily practice-time tracking ----------
+   Counts a 10 s tick whenever the page is visible AND the user was active
+   within the last 60 s. Stored per local calendar day → resets automatically
+   at midnight; history stays for the admin daily log. */
+function dayKeyOf(d){ return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0'); }
+function todayKey(){ return dayKeyOf(new Date()); }
+let LAST_ACTIVITY = Date.now();
+['click','keydown','pointerdown','pointermove','scroll','touchstart'].forEach(ev=>
+  addEventListener(ev, ()=>{ LAST_ACTIVITY = Date.now(); }, {passive:true}));
+setInterval(()=>{
+  if(document.visibilityState==='visible' && Date.now()-LAST_ACTIVITY < 60000){
+    const k = todayKey();
+    S.days[k] = (S.days[k]||0) + 10;
+    const keys = Object.keys(S.days);
+    if(keys.length > 120) keys.sort().slice(0, keys.length-120).forEach(old=>delete S.days[old]);
+    save();
+    updateDayChip();
+  }
+}, 10000);
+function updateDayChip(){
+  const el = document.getElementById('dayVal');
+  if(el) el.textContent = Math.floor((S.days[todayKey()]||0)/60);
+  const chip = document.getElementById('dayChip');
+  if(chip) chip.title = t('today');
+}
 
 /* ---------- helpers ---------- */
 const $ = sel => document.querySelector(sel);
@@ -36,7 +63,7 @@ function totalEarned(){
 }
 function balance(){ return totalEarned() + S.adj.reduce((s,a)=>s+a.min,0); }
 function starsFor(pct){ return pct>=90?'⭐⭐⭐' : pct>=70?'⭐⭐' : pct>=50?'⭐' : '☆'; }
-function updateChip(){ $('#creditVal').textContent = balance(); }
+function updateChip(){ $('#creditVal').textContent = balance(); updateDayChip(); }
 
 /* ---------- i18n render ---------- */
 function applyLang(){
@@ -342,13 +369,13 @@ function finishTest(){
   clearInterval(timerInt);
   const details = SES.qs.map((q,i)=>{
     const g = gradeQ(q, SES.answers[i]);
-    return { q:q.q, given:g.givenDisp, correct:g.correctDisp, pts:g.pts, max:g.max };
+    return { q:q.q, given:g.givenDisp, correct:g.correctDisp, pts:g.pts, max:g.max, h:q.h||null };
   });
   const pts = details.reduce((s,d)=>s+d.pts,0);
   const max = details.reduce((s,d)=>s+d.max,0);
   const pct = Math.round(pts/max*100);
   const res = {
-    id: Date.now(), testId: SES.test.id,
+    id: Date.now(), testId: SES.test.id, day: todayKey(),
     testTitle: SES.test.title.de,
     date: new Date().toLocaleString('de-DE',{dateStyle:'short',timeStyle:'short'}),
     pct, pts, max,

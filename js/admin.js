@@ -20,7 +20,7 @@ function adminLogout(){ ADMIN_OK=false; goHome(); }
 
 function renderAdmin(){
   updateChip();
-  const tabs = [['results',t('tab_results')],['attempts',t('tab_attempts')],['credits',t('tab_credits')],['solutions',t('tab_solutions')],['settings',t('tab_settings')]];
+  const tabs = [['days',t('tab_days')],['results',t('tab_results')],['attempts',t('tab_attempts')],['credits',t('tab_credits')],['solutions',t('tab_solutions')],['settings',t('tab_settings')]];
   let html = `<button class="back-link" onclick="goHome()">${t('backHome')}</button>
   <div class="admin-wrap">
     <h2 style="color:var(--purple-d);margin-bottom:12px">🛠️ ${t('adminPanel')}</h2>
@@ -28,7 +28,8 @@ function renderAdmin(){
       <button class="atab" style="margin-left:auto;background:#ffe3e6;color:var(--red)" onclick="adminLogout()">🚪 ${t('logout')}</button>
     </div>
     <div class="admin-section">`;
-  if(ATAB==='results') html += adminResults();
+  if(ATAB==='days') html += adminDays();
+  else if(ATAB==='results') html += adminResults();
   else if(ATAB==='attempts') html += adminAttempts();
   else if(ATAB==='credits') html += adminCredits();
   else if(ATAB==='solutions') html += adminSolutions();
@@ -36,6 +37,76 @@ function renderAdmin(){
   html += `</div></div>`;
   $('#app').innerHTML = html;
   window.scrollTo(0,0);
+}
+
+/* ---- daily log tab ---- */
+function resultDay(r){ return r.day || dayKeyOf(new Date(r.id)); }
+function fmtDayLabel(k){
+  const [y,m,d] = k.split('-');
+  return `${d}.${m}.${y}`;
+}
+function dayResults(k){ return S.results.filter(r=>resultDay(r)===k); }
+function topicLabel(k){
+  const h = HELP[k]; if(!h) return k;
+  let l = (h[LANG]||h.de).split('\n')[0];
+  l = l.replace(/^[^\p{L}\p{N}]+/u,'');   // strip leading emoji/symbols
+  l = l.split('–')[0].split('—')[0];      // cut trailing "– so geht's" parts
+  l = l.replace(/[::]\s*$/,'').trim();
+  return l || k;
+}
+function adminDays(){
+  const keys = new Set(Object.keys(S.days||{}));
+  S.results.forEach(r=>keys.add(resultDay(r)));
+  const days = [...keys].sort().reverse();
+  if(!days.length) return `<h3>${t('tab_days')}</h3><p style="font-weight:700;color:#888">${t('noDays')}</p>`;
+  const rows = days.map(k=>{
+    const rs = dayResults(k);
+    const mins = Math.round((S.days[k]||0)/60);
+    const avg = rs.length ? Math.round(rs.reduce((s,r)=>s+r.pct,0)/rs.length) : null;
+    const cls = avg===null?'':(avg>=80?'g':avg>=50?'o':'r');
+    return `<tr class="clickable" onclick="showDayDetail('${k}')">
+      <td><b>${fmtDayLabel(k)}</b></td>
+      <td>⏱ ${mins} ${t('min')}</td>
+      <td>📝 ${rs.length}</td>
+      <td>${avg!==null?`<span class="pill ${cls}">Ø ${avg}%</span>`:'–'}</td>
+      <td>💡 ${rs.reduce((s,r)=>s+(r.helpUsed||0),0)}</td></tr>`;
+  }).join('');
+  return `<h3>${t('tab_days')}</h3>
+  <p class="hint">${t('dayResetNote')}</p>
+  <div style="overflow-x:auto"><table class="res-table">
+    <tr><th>${t('date')}</th><th>${t('workTime')}</th><th>${t('testsDone')}</th><th>${t('avgScore')}</th><th>${t('helpUsed')}</th></tr>
+    ${rows}</table></div>
+  <p class="hint">👆 ${t('conclusion')}</p>`;
+}
+function showDayDetail(k){
+  const rs = dayResults(k);
+  const mins = Math.round((S.days[k]||0)/60);
+  // list of tests taken
+  const testLines = rs.length ? rs.map(r=>{
+    const cls = r.pct>=80?'g':r.pct>=50?'o':'r';
+    const test = testById(r.testId);
+    return `<div class="att-row"><span>${test?test.icon+' ':''}<b>${esc(r.testTitle)}</b>
+      <small style="color:#aaa">(${t('attemptShort')} ${r.attempt} · ⏱ ${fmtTime(r.durationSec)} · 💡${r.helpUsed})</small></span>
+      <span class="pill ${cls}">${r.pct}%</span></div>`;
+  }).join('') : `<p style="font-weight:700;color:#888">${t('noTestsDay')}</p>`;
+  // wins
+  const wins = rs.filter(r=>r.pct>=80).map(r=>esc(r.testTitle)).join(', ');
+  // weak topics: lost points per help-topic across all details of the day
+  const lost = {};
+  rs.forEach(r=>(r.details||[]).forEach(d=>{
+    if(d.h && d.pts < d.max) lost[d.h] = (lost[d.h]||0) + (d.max - d.pts);
+  }));
+  const weak = Object.entries(lost).sort((a,b)=>b[1]-a[1]).slice(0,4);
+  const weakHtml = weak.length
+    ? weak.map(([topic,pts])=>`<div class="att-row"><span>${esc(topicLabel(topic))}</span><span class="pill r">−${pts} P.</span></div>`).join('')
+    : `<p style="font-weight:700;color:var(--green)">${t('allGood')}</p>`;
+  showModal(`<button class="close-x" onclick="closeModal()">✕</button>
+    <h3>📅 ${fmtDayLabel(k)} — ${t('conclusion')}</h3>
+    <p style="font-weight:800;font-size:1.1rem">⏱ ${t('workTime')}: ${mins} ${t('min')}</p>
+    <h3 style="margin-top:14px">📝 ${t('testsDone')} (${rs.length})</h3>${testLines}
+    <h3 style="margin-top:14px">${t('wins')}</h3>
+    <p style="font-weight:700">${wins || t('noWins')}</p>
+    <h3 style="margin-top:14px">${t('weakTopics')}</h3>${weakHtml}`);
 }
 
 /* ---- results tab ---- */

@@ -110,6 +110,22 @@ const I18N = {
   expTitle:{de:'Erklärung & Videos',ru:'Объяснение и видео',en:'Explanation & Videos'},
   videos:{de:'Videos zum Thema',ru:'Видео по теме',en:'Videos on this topic'},
   moreVideos:{de:'Mehr Videos auf YouTube finden',ru:'Найти ещё видео на YouTube',en:'Find more videos on YouTube'},
+  today:{de:'Heute geübt',ru:'Сегодня занимался',en:'Practised today'},
+  tab_days:{de:'📅 Tagebuch',ru:'📅 Дневник',en:'📅 Daily Log'},
+  workTime:{de:'Übungszeit',ru:'Время занятий',en:'Practice time'},
+  testsDone:{de:'Gelöste Tests',ru:'Решённые тесты',en:'Tests completed'},
+  avgScore:{de:'Ø Ergebnis',ru:'Средний результат',en:'Avg. score'},
+  conclusion:{de:'Fazit des Tages',ru:'Итог дня',en:'Day summary'},
+  weakTopics:{de:'📌 Diese Themen noch üben',ru:'📌 Эти темы стоит потренировать',en:'📌 Topics to practise'},
+  wins:{de:'🏆 Erfolge (≥ 80 %)',ru:'🏆 Успехи (≥ 80 %)',en:'🏆 Wins (≥ 80 %)'},
+  noWins:{de:'Heute noch keine – morgen klappt es!',ru:'Пока нет – завтра получится!',en:'None yet – tomorrow!'},
+  allGood:{de:'Alles gut gelöst – keine Problemthemen! 🎉',ru:'Всё решено хорошо – проблемных тем нет! 🎉',en:'Everything solved well – no weak topics! 🎉'},
+  noTestsDay:{de:'An diesem Tag wurden keine Tests abgegeben.',ru:'В этот день тесты не сдавались.',en:'No tests were submitted on this day.'},
+  noDays:{de:'Noch keine Aktivität aufgezeichnet.',ru:'Активность пока не записана.',en:'No activity recorded yet.'},
+  dayResetNote:{de:'Die Übungszeit startet jeden Tag automatisch bei 0. Alle Tage bleiben hier für dich gespeichert.',
+    ru:'Время занятий каждый день автоматически начинается с 0. Все дни сохраняются здесь для тебя.',
+    en:'Practice time restarts at 0 every day automatically. All days stay saved here for you.'},
+  attemptShort:{de:'Versuch',ru:'попытка',en:'attempt'},
 };
 let LANG = 'de';
 function t(k){ const e = I18N[k]; if(!e) return k; return e[LANG] || e.de; }
