@@ -909,5 +909,261 @@ en:`🧭 Map, compass, scale:
 • Calculate: cm on the map × scale number = real distance (then convert to km).
 • The LEGEND explains map symbols.
 • On maps, north is almost always at the TOP.`}
+,
+nomen:{
+de:`🏷️ Nomen: Artikel und Mehrzahl:
+• Jedes Nomen hat einen Artikel: der (männlich), die (weiblich), das (sächlich).
+• Mehrzahl bildet man verschieden: -e (Baum→Bäume), -er (Kind→Kinder), -n/-en (Schule→Schulen), -s (Auto→Autos).
+• Oft kommt ein Umlaut dazu: Maus → Mäuse, Baum → Bäume.
+• Bei zusammengesetzten Nomen bestimmt das LETZTE Wort den Artikel: die Haustür (wegen die Tür).`,
+ru:`🏷️ Существительные: артикль и множественное число:
+• У каждого существительного есть артикль: der (мужской), die (женский), das (средний).
+• Множественное число образуется по-разному: -e (Baum→Bäume), -er (Kind→Kinder), -n/-en (Schule→Schulen), -s (Auto→Autos).
+• Часто добавляется умлаут: Maus → Mäuse.
+• В сложных словах артикль определяет ПОСЛЕДНЕЕ слово: die Haustür (потому что die Tür).`,
+en:`🏷️ Nouns: article and plural:
+• Every German noun has an article: der (masculine), die (feminine), das (neuter).
+• Plurals are built in different ways: -e (Baum→Bäume), -er (Kind→Kinder), -n/-en (Schule→Schulen), -s (Auto→Autos).
+• Often an umlaut is added: Maus → Mäuse.
+• In compound nouns the LAST word decides the article: die Haustür (because of die Tür).`},
+verben:{
+de:`🏃 Verben konjugieren:
+Die Grundform endet auf -en (laufen, spielen).
+ich spiele · du spielst · er/sie/es spielt · wir spielen · ihr spielt · sie spielen
+• Achtung, starke Verben ändern den Vokal: ich lese → du liest, ich laufe → du läufst.
+• Befehlsform (du): Komm! Lies! Lauf!
+💡 Um die Grundform zu finden: „Was kann man tun?" – man kann ... laufen.`,
+ru:`🏃 Спряжение глаголов:
+Начальная форма оканчивается на -en (laufen, spielen).
+ich spiele · du spielst · er/sie/es spielt · wir spielen · ihr spielt · sie spielen
+• Внимание: сильные глаголы меняют гласную: ich lese → du liest, ich laufe → du läufst.
+• Повелительная форма (du): Komm! Lies! Lauf!
+💡 Чтобы найти начальную форму, спроси: «Что можно делать?» – можно ... laufen.`,
+en:`🏃 Conjugating German verbs:
+The base form ends in -en (laufen, spielen).
+ich spiele · du spielst · er/sie/es spielt · wir spielen · ihr spielt · sie spielen
+• Watch out: strong verbs change their vowel: ich lese → du liest, ich laufe → du läufst.
+• Command form (du): Komm! Lies! Lauf!`},
+adjektive:{
+de:`🌈 Adjektive und ihre Steigerung:
+Adjektive sagen, WIE etwas ist: groß, schnell, mutig.
+Steigerung: Grundstufe – Vergleichsstufe – Höchststufe:
+schnell – schneller – am schnellsten
+• Oft mit Umlaut: alt – älter – am ältesten
+• Unregelmäßig lernen: gut – besser – am besten · viel – mehr – am meisten · gern – lieber – am liebsten
+• Gegenteile (Antonyme): groß ↔ klein, hell ↔ dunkel.`,
+ru:`🌈 Прилагательные и степени сравнения:
+Прилагательные говорят, КАКОЙ предмет: groß, schnell, mutig.
+Степени: обычная – сравнительная – превосходная:
+schnell – schneller – am schnellsten
+• Часто с умлаутом: alt – älter – am ältesten
+• Неправильные надо выучить: gut – besser – am besten · viel – mehr – am meisten · gern – lieber – am liebsten
+• Противоположности: groß ↔ klein, hell ↔ dunkel.`,
+en:`🌈 Adjectives and comparison:
+Adjectives say WHAT something is like: groß, schnell, mutig.
+Comparison: base – comparative – superlative:
+schnell – schneller – am schnellsten
+• Often with umlaut: alt – älter – am ältesten
+• Learn the irregular ones: gut – besser – am besten · viel – mehr – am meisten · gern – lieber – am liebsten`},
+synonyme:{
+de:`🔁 Synonyme, Antonyme, Oberbegriffe:
+• SYNONYM: ein Wort mit fast gleicher Bedeutung: sprechen = reden.
+• ANTONYM: das Gegenteil: mutig ↔ ängstlich.
+• OBERBEGRIFF: das „Familien-Wort" für eine Gruppe: Apfel, Birne, Kirsche → Obst.
+💡 Probe: Kann ich das Wort im Satz austauschen, ohne dass sich die Bedeutung ändert? Dann ist es ein Synonym.`,
+ru:`🔁 Синонимы, антонимы, обобщающие слова:
+• СИНОНИМ: слово с почти одинаковым значением: sprechen = reden.
+• АНТОНИМ: противоположность: mutig ↔ ängstlich.
+• ОБОБЩАЮЩЕЕ СЛОВО: «семейное» слово для группы: Apfel, Birne, Kirsche → Obst (фрукты).
+💡 Проверка: можно ли заменить слово в предложении без изменения смысла? Тогда это синоним.`,
+en:`🔁 Synonyms, antonyms, umbrella terms:
+• SYNONYM: a word with almost the same meaning: sprechen = reden.
+• ANTONYM: the opposite: mutig ↔ ängstlich.
+• UMBRELLA TERM: the "family word" for a group: Apfel, Birne, Kirsche → Obst (fruit).`},
+engCan:{
+de:`🇬🇧 can und can't:
+• can = können: I can swim. (Ich kann schwimmen.)
+• Verneinung: can't (= cannot): He can't fly.
+• Nach can steht IMMER die Grundform – NIE ein s: She can sing. (nicht: cans, nicht: sings!)
+• Frage: Can you help me? – Yes, I can. / No, I can't.`,
+ru:`🇬🇧 can и can't:
+• can = уметь/мочь: I can swim. (Я умею плавать.)
+• Отрицание: can't (= cannot): He can't fly.
+• После can ВСЕГДА начальная форма глагола – НИКОГДА нет s: She can sing.
+• Вопрос: Can you help me? – Yes, I can. / No, I can't.`,
+en:`🇬🇧 can and can't:
+• can = to be able to: I can swim.
+• Negative: can't (= cannot): He can't fly.
+• After can ALWAYS the base form – NEVER an s: She can sing.
+• Question: Can you help me? – Yes, I can. / No, I can't.`},
+engTime:{
+de:`🕐 Uhrzeit und Datum auf Englisch:
+• o'clock = volle Stunde: It's three o'clock. (3:00)
+• half past = halb NACH: half past three = 3:30 (Achtung: im Deutschen sagen wir „halb vier"!)
+• quarter past = Viertel nach (3:15) · quarter to = Viertel vor (3:45)
+• Frage: What time is it? / What's the time?
+• Wochentage und Monate schreibt man im Englischen GROSS: Monday, May.`,
+ru:`🕐 Время и дата по-английски:
+• o'clock = ровно час: It's three o'clock. (3:00)
+• half past = половина ПОСЛЕ: half past three = 3:30
+• quarter past = четверть после (3:15) · quarter to = без четверти (3:45)
+• Вопрос: What time is it?
+• Дни недели и месяцы в английском пишутся с БОЛЬШОЙ буквы: Monday, May.`,
+en:`🕐 Time and date in English:
+• o'clock = full hour: It's three o'clock. (3:00)
+• half past three = 3:30
+• quarter past = 3:15 · quarter to = 3:45
+• Question: What time is it?
+• Days and months are CAPITALISED in English: Monday, May.`},
+kalender:{
+de:`📅 Kalender-Wissen:
+• Ein Jahr hat 12 Monate und 365 Tage (Schaltjahr: 366 – alle 4 Jahre).
+• 4 Jahreszeiten: Frühling, Sommer, Herbst, Winter.
+• Monate mit 31 Tagen: Januar, März, Mai, Juli, August, Oktober, Dezember.
+• Der Februar hat 28 Tage (im Schaltjahr 29).
+• Eine Woche hat 7 Tage, ein Tag 24 Stunden.
+💡 Knöchel-Trick: Zähle die Monate auf den Handknöcheln – Knöchel = 31 Tage!`,
+ru:`📅 Знания о календаре:
+• В году 12 месяцев и 365 дней (високосный год: 366 – каждые 4 года).
+• 4 времени года: весна, лето, осень, зима.
+• Месяцы с 31 днём: январь, март, май, июль, август, октябрь, декабрь.
+• В феврале 28 дней (в високосном году 29).
+• В неделе 7 дней, в сутках 24 часа.
+💡 Приём с костяшками: считай месяцы по костяшкам руки – костяшка = 31 день!`,
+en:`📅 Calendar knowledge:
+• A year has 12 months and 365 days (leap year: 366 – every 4 years).
+• 4 seasons: spring, summer, autumn, winter.
+• Months with 31 days: January, March, May, July, August, October, December.
+• February has 28 days (29 in a leap year).
+• A week has 7 days, a day 24 hours.`},
+bioBirds:{
+de:`🐦 Vögel:
+• Kennzeichen: Federn, Schnabel (keine Zähne!), legen Eier, gleichwarm.
+• Der Körper ist zum FLIEGEN gebaut: hohle, leichte Knochen, starke Brustmuskeln, Flügel.
+• ZUGVÖGEL fliegen im Herbst in den warmen Süden (z. B. Storch, Schwalbe).
+• STANDVÖGEL bleiben im Winter hier (z. B. Amsel, Meise, Spatz).
+• Die Schnabelform verrät die Nahrung: spitzer Schnabel = Insekten, dicker Schnabel = Körner.`,
+ru:`🐦 Птицы:
+• Признаки: перья, клюв (нет зубов!), откладывают яйца, теплокровные.
+• Тело создано для ПОЛЁТА: полые лёгкие кости, сильные грудные мышцы, крылья.
+• ПЕРЕЛЁТНЫЕ птицы осенью улетают на юг (аист, ласточка).
+• ОСЕДЛЫЕ птицы остаются на зиму (дрозд, синица, воробей).
+• Форма клюва показывает питание: острый клюв = насекомые, толстый клюв = зёрна.`,
+en:`🐦 Birds:
+• Features: feathers, beak (no teeth!), lay eggs, warm-blooded.
+• The body is built for FLYING: hollow light bones, strong chest muscles, wings.
+• MIGRATORY birds fly south in autumn (stork, swallow).
+• RESIDENT birds stay in winter (blackbird, tit, sparrow).
+• Beak shape shows the food: pointed beak = insects, thick beak = seeds.`},
+geoEurope:{
+de:`🇪🇺 Europa:
+• Europa ist ein Kontinent mit über 40 Ländern.
+• Wichtige Hauptstädte: Frankreich→Paris, Italien→Rom, Spanien→Madrid, Polen→Warschau, Österreich→Wien, Niederlande→Amsterdam.
+• Das höchste Gebirge (in Mitteleuropa): die Alpen. Der längste Fluss Europas: die Wolga.
+• Viele Länder gehören zur Europäischen Union (EU) und bezahlen mit dem Euro.`,
+ru:`🇪🇺 Европа:
+• Европа – континент, где больше 40 стран.
+• Важные столицы: Франция→Париж, Италия→Рим, Испания→Мадрид, Польша→Варшава, Австрия→Вена, Нидерланды→Амстердам.
+• Самые высокие горы Центральной Европы: Альпы. Самая длинная река Европы: Волга.
+• Многие страны входят в Европейский союз (ЕС) и платят евро.`,
+en:`🇪🇺 Europe:
+• Europe is a continent with more than 40 countries.
+• Important capitals: France→Paris, Italy→Rome, Spain→Madrid, Poland→Warsaw, Austria→Vienna, Netherlands→Amsterdam.
+• Highest mountains of central Europe: the Alps. Longest river of Europe: the Volga.
+• Many countries belong to the European Union (EU) and pay with the euro.`},
+infoComputer:{
+de:`💻 Wie ein Computer arbeitet – das EVA-Prinzip:
+E wie EINGABE → V wie VERARBEITUNG → A wie AUSGABE.
+• Eingabegeräte: Tastatur, Maus, Mikrofon, Scanner.
+• Verarbeitung: der Prozessor (CPU) – das „Gehirn" des Computers.
+• Ausgabegeräte: Monitor, Drucker, Lautsprecher.
+• HARDWARE = alles, was man anfassen kann. SOFTWARE = Programme (z. B. das Betriebssystem Windows).
+• Die Festplatte/SSD speichert Daten dauerhaft.`,
+ru:`💻 Как работает компьютер – принцип EVA:
+E = ВВОД (Eingabe) → V = ОБРАБОТКА (Verarbeitung) → A = ВЫВОД (Ausgabe).
+• Устройства ввода: клавиатура, мышь, микрофон, сканер.
+• Обработка: процессор (CPU) – «мозг» компьютера.
+• Устройства вывода: монитор, принтер, колонки.
+• HARDWARE = всё, что можно потрогать. SOFTWARE = программы (например, операционная система Windows).
+• Жёсткий диск/SSD хранит данные постоянно.`,
+en:`💻 How a computer works – the IPO principle:
+INPUT → PROCESSING → OUTPUT (German: EVA-Prinzip).
+• Input devices: keyboard, mouse, microphone, scanner.
+• Processing: the processor (CPU) – the computer's "brain".
+• Output devices: monitor, printer, speakers.
+• HARDWARE = everything you can touch. SOFTWARE = programs (e.g. the operating system Windows).
+• The hard drive/SSD stores data permanently.`},
+infoInternet:{
+de:`🌐 Internet und Sicherheit:
+• Das Internet ist ein weltweites Netzwerk aus Millionen Computern.
+• Mit einem BROWSER (Chrome, Firefox, Edge) besuchst du Webseiten.
+• Eine E-Mail-Adresse erkennst du am @-Zeichen.
+SICHERHEITSREGELN:
+1. Ein sicheres Passwort ist LANG und mischt Buchstaben, Zahlen und Zeichen.
+2. Teile dein Passwort mit NIEMANDEM (außer deinen Eltern).
+3. Gib nie deinen echten Namen, deine Adresse oder Fotos an Fremde.
+4. Komische Nachricht? Sofort einem Erwachsenen zeigen!
+5. Glaube nicht alles, was im Internet steht – prüfe die Quelle.`,
+ru:`🌐 Интернет и безопасность:
+• Интернет – всемирная сеть из миллионов компьютеров.
+• С помощью БРАУЗЕРА (Chrome, Firefox, Edge) ты открываешь сайты.
+• Адрес электронной почты узнают по знаку @.
+ПРАВИЛА БЕЗОПАСНОСТИ:
+1. Надёжный пароль – ДЛИННЫЙ, с буквами, цифрами и знаками.
+2. НИКОМУ не говори свой пароль (кроме родителей).
+3. Никогда не сообщай незнакомцам имя, адрес или фото.
+4. Странное сообщение? Сразу покажи взрослому!
+5. Не верь всему в интернете – проверяй источник.`,
+en:`🌐 Internet and safety:
+• The internet is a worldwide network of millions of computers.
+• With a BROWSER (Chrome, Firefox, Edge) you visit websites.
+• You recognise an e-mail address by the @ sign.
+SAFETY RULES:
+1. A safe password is LONG and mixes letters, numbers and symbols.
+2. Share your password with NOBODY (except your parents).
+3. Never give your real name, address or photos to strangers.
+4. Strange message? Show an adult immediately!
+5. Don't believe everything online – check the source.`},
+infoScratch:{
+de:`🐱 Algorithmen und Scratch:
+• Ein ALGORITHMUS ist eine Schritt-für-Schritt-Anleitung – wie ein Kochrezept!
+• In SCRATCH programmierst du mit bunten BLÖCKEN, die man zusammensteckt.
+• SCHLEIFE (Wiederholung): „wiederhole 4-mal" spart dir Arbeit.
+  Beispiel: wiederhole 4-mal [gehe 100 Schritte, drehe dich um 90°] → die Figur läuft ein QUADRAT!
+• BEDINGUNG (wenn–dann): „WENN Taste gedrückt, DANN springe."
+• Ein Fehler im Programm heißt BUG. Fehler suchen = Debugging.`,
+ru:`🐱 Алгоритмы и Scratch:
+• АЛГОРИТМ – это пошаговая инструкция, как кулинарный рецепт!
+• В SCRATCH ты программируешь цветными БЛОКАМИ, которые соединяются.
+• ЦИКЛ (повторение): «повтори 4 раза» экономит работу.
+  Пример: повтори 4 раза [иди 100 шагов, повернись на 90°] → фигура рисует КВАДРАТ!
+• УСЛОВИЕ (если–то): «ЕСЛИ нажата клавиша, ТО прыгни».
+• Ошибка в программе называется BUG (баг). Поиск ошибок = дебаггинг.`,
+en:`🐱 Algorithms and Scratch:
+• An ALGORITHM is a step-by-step instruction – like a cooking recipe!
+• In SCRATCH you program with colourful BLOCKS that snap together.
+• LOOP (repetition): "repeat 4 times" saves you work.
+  Example: repeat 4 times [move 100 steps, turn 90°] → the sprite walks a SQUARE!
+• CONDITION (if–then): "IF key pressed, THEN jump."
+• A mistake in a program is called a BUG. Finding them = debugging.`},
+infoDaten:{
+de:`📁 Daten, Dateien und Ordner:
+• Eine DATEI ist z. B. ein Bild, ein Text oder ein Lied. Ein ORDNER sortiert Dateien – wie eine Schublade.
+• Die Endung verrät den Typ: .jpg/.png = Bild · .mp3 = Musik · .mp4 = Video · .txt/.docx = Text.
+• Computer rechnen nur mit ZWEI Ziffern: 0 und 1 – das BINÄRSYSTEM. (Strom an = 1, Strom aus = 0)
+• Die CLOUD ist Speicher im Internet.
+• DATENSCHUTZ: Deine Daten (Name, Fotos, Adresse) gehören DIR. Poste nie Fotos von anderen ohne Erlaubnis!`,
+ru:`📁 Данные, файлы и папки:
+• ФАЙЛ – это, например, картинка, текст или песня. ПАПКА сортирует файлы – как ящик.
+• Расширение показывает тип: .jpg/.png = картинка · .mp3 = музыка · .mp4 = видео · .txt/.docx = текст.
+• Компьютер считает только ДВУМЯ цифрами: 0 и 1 – ДВОИЧНАЯ система. (ток есть = 1, тока нет = 0)
+• ОБЛАКО (Cloud) – хранилище в интернете.
+• ЗАЩИТА ДАННЫХ: твои данные (имя, фото, адрес) принадлежат ТЕБЕ. Никогда не выкладывай чужие фото без разрешения!`,
+en:`📁 Data, files and folders:
+• A FILE is e.g. a picture, a text or a song. A FOLDER sorts files – like a drawer.
+• The ending shows the type: .jpg/.png = picture · .mp3 = music · .mp4 = video · .txt/.docx = text.
+• Computers calculate with only TWO digits: 0 and 1 – the BINARY system. (power on = 1, power off = 0)
+• The CLOUD is storage on the internet.
+• DATA PROTECTION: your data (name, photos, address) belongs to YOU. Never post photos of others without permission!`}
 };
 function helpText(key){ const h = HELP[key]; if(!h) return ''; return h[LANG] || h.de; }

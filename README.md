@@ -12,9 +12,11 @@ All progress, results and credits are saved automatically in that browser (local
 
 ## What's inside
 
-- **54 tests** organised by grade and subject:
-  - **Klasse 4:** Mathematik (13 tests, incl. 3 full "Lernzielkontrollen" with the 7-task structure), Deutsch (8), Englisch (3), Sachunterricht (5)
-  - **Klasse 5 (Realschule NRW):** Mathematik (7), Deutsch (6), Englisch (5), Biologie (4), Erdkunde (3)
+- **79 tests** organised by grade and subject:
+  - **Klasse 4:** Mathematik (16 tests, incl. 3 full "Lernzielkontrollen" with the 7-task structure), Deutsch (12), Englisch (5), Sachunterricht (6)
+  - **Klasse 5 (Realschule NRW):** Mathematik (10), Deutsch (9), Englisch (8), **Informatik (4)**, Biologie (5), Erdkunde (4)
+- **Instant feedback:** after each task he presses "Prüfen" and immediately sees ✔ right / ✘ wrong (but never the solution — that stays admin-only).
+- **📚 Erklärung & 🎬 button on every test card:** full explanation of all topics in the test (DE/RU/EN) plus real YouTube explainer videos in German and Russian (Lehrerschmidt & co.), with "find more videos" search links.
 - **Math tests are generated with fresh numbers on every attempt** (🎲 badge) — so he can never memorise answers.
 - **3 languages:** German (main) 🇩🇪, Russian 🇷🇺, English 🇬🇧 — switch at the top right. Every question also has a 🌐 translation button.
 - **💡 Help button on every question** — explains HOW to solve that type of task (in all 3 languages), but **never shows the answer**.

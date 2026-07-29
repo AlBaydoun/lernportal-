@@ -1,8 +1,8 @@
 /* ============ Lernportal core app ============ */
 const LS_KEY = 'lernportal_v1';
-const ALL_TESTS = [...TESTS_MATH, ...TESTS_GERMAN, ...TESTS_ENGLISH, ...TESTS_OTHER];
-const SUBJECT_ORDER = ['math','german','english','sach','bio','geo'];
-const SUBJECT_ICON = {math:'🔢',german:'📖',english:'🇬🇧',sach:'🔬',bio:'🌿',geo:'🌍'};
+const ALL_TESTS = [...TESTS_MATH, ...TESTS_GERMAN, ...TESTS_ENGLISH, ...TESTS_OTHER, ...TESTS_INFO];
+const SUBJECT_ORDER = ['math','german','english','info','sach','bio','geo'];
+const SUBJECT_ICON = {math:'🔢',german:'📖',english:'🇬🇧',info:'💻',sach:'🔬',bio:'🌿',geo:'🌍'};
 const MAX_ATTEMPTS = 2;
 
 /* ---------- state ---------- */
@@ -87,6 +87,7 @@ function renderHome(){
           <span class="att-badge ${locked?'locked':''}">${locked ? '🔒 '+t('locked') : left+' × '+t('attemptsLeft')}</span>
         </div>
         ${best!==null ? `<div class="best-line">${t('best')}: ${best}%</div>`:''}
+        <button class="exp-btn" onclick="event.stopPropagation();openTopicInfo('${test.id}')">${t('explanation')} &amp; 🎬</button>
       </div></div>`;
     }
     html += `</div></div>`;
@@ -115,7 +116,8 @@ function startTest(id){
     }
   });
   S.attempts[id] = attemptsUsed(id)+1; save();
-  SES = { test, qs, idx:0, answers:new Array(qs.length).fill(null), helpUsed:0, started:Date.now(), showTr:false };
+  SES = { test, qs, idx:0, answers:new Array(qs.length).fill(null), checked:new Array(qs.length).fill(null),
+          helpUsed:0, started:Date.now(), showTr:false };
   VIEW = {name:'test'};
   renderQuestion();
 }
@@ -135,11 +137,13 @@ function renderQuestion(){
   if(test.reading){
     html += `<div class="reading-box"><h3>📖 ${esc(test.reading.title)}</h3>${nl(test.reading.text)}</div>`;
   }
+  const chk = SES.checked[idx];
   html += `<div class="qcard">
     <div class="qtext">${nl(q.q)}</div>
     ${q.svg ? `<div class="qsvg">${q.svg}</div>` : ''}
     <div id="transBox"></div>
     <div class="ans-area" id="ansArea">${answerHTML(q)}</div>
+    <div id="fbArea">${chk ? fbBanner(chk) : ''}</div>
     <div class="q-tools">
       <button class="tool-btn help-btn" onclick="openHelp('${q.h||''}')">💡 ${t('help')}</button>
       ${q.tr ? `<button class="tool-btn tr-btn" onclick="toggleTr()">🌐 ${t('translate')}</button>` : ''}
@@ -147,17 +151,42 @@ function renderQuestion(){
   </div>
   <div class="nav-row">
     <button class="btn ghost" onclick="prevQ()" ${idx===0?'disabled':''}>${t('back')}</button>
-    ${idx<total-1
-      ? `<button class="btn primary" onclick="nextQ()">${t('next')}</button>`
-      : `<button class="btn green" onclick="finishTest()">${t('submit')}</button>`}
+    ${!chk
+      ? `<button class="btn primary" onclick="checkAnswer()">${t('check')}</button>`
+      : (idx<total-1
+          ? `<button class="btn primary" onclick="nextQ()">${t('next')}</button>`
+          : `<button class="btn green" onclick="finishTest()">${t('submit')}</button>`)}
   </div>
   <div style="text-align:center"><button class="back-link" onclick="cancelTest()">✕ ${t('cancelTest')}</button></div>
   </div>`;
   $('#app').innerHTML = html;
   restoreAnswer(q, SES.answers[idx]);
+  if(chk) lockAnswers();
   if(SES.showTr) toggleTr(true);
   window.scrollTo(0,0);
   startTimer();
+}
+function fbBanner(chk){
+  if(chk.pts===chk.max) return `<div class="fb-banner ok">${t('fbRight')}</div>`;
+  if(chk.pts>0) return `<div class="fb-banner half">${t('fbPartial')} ${chk.pts}/${chk.max}</div>`;
+  return `<div class="fb-banner bad">${t('fbWrong')}</div>`;
+}
+function lockAnswers(){
+  const area = $('#ansArea'); if(!area) return;
+  area.classList.add('locked');
+  area.querySelectorAll('input,select,button').forEach(el=>{ el.disabled = true; });
+}
+function checkAnswer(){
+  const q = SES.qs[SES.idx];
+  const given = collectAnswer();
+  if(given===null){
+    $('#fbArea').innerHTML = `<div class="fb-banner empty">${t('fbEmpty')}</div>`;
+    return;
+  }
+  SES.answers[SES.idx] = given;
+  const g = gradeQ(q, given);
+  SES.checked[SES.idx] = {pts:g.pts, max:g.max};
+  renderQuestion();
 }
 let timerInt = null;
 function startTimer(){
@@ -220,8 +249,8 @@ function restoreAnswer(q, saved){
   else if(q.t==='tf'){ const b=document.querySelector(`.tf-btn[data-v="${saved}"]`); if(b) b.classList.add('sel'); }
   else if(q.t==='match'){ document.querySelectorAll('.match-sel').forEach((s,i)=>{ s.value=saved[i]||''; }); }
 }
-function nextQ(){ SES.answers[SES.idx]=collectAnswer(); SES.showTr=false; SES.idx++; renderQuestion(); }
-function prevQ(){ SES.answers[SES.idx]=collectAnswer(); SES.showTr=false; SES.idx--; renderQuestion(); }
+function nextQ(){ if(!SES.checked[SES.idx]) SES.answers[SES.idx]=collectAnswer(); SES.showTr=false; SES.idx++; renderQuestion(); }
+function prevQ(){ if(!SES.checked[SES.idx]) SES.answers[SES.idx]=collectAnswer(); SES.showTr=false; SES.idx--; renderQuestion(); }
 function cancelTest(){ if(confirm(t('confirmSubmit'))) { clearInterval(timerInt); goHome(); } }
 
 function toggleTr(force){
@@ -240,13 +269,38 @@ function openHelp(key){
   showModal(`<button class="close-x" onclick="closeModal()">✕</button>
     <h3>💡 ${t('help')}</h3>
     <div class="help-body">${nl(body)}</div>
+    ${videoHTML(key)}
     <p class="hint" style="margin-top:12px">${t('helpUsedNote')}</p>`);
+}
+
+/* ---------- section explanation + videos ---------- */
+const TOPIC_CACHE = {};
+function topicsFor(test){
+  if(TOPIC_CACHE[test.id]) return TOPIC_CACHE[test.id];
+  const qs = test.genTest ? test.gen() : test.qs;
+  const seen = [];
+  qs.forEach(q=>{ if(q.h && !seen.includes(q.h)) seen.push(q.h); });
+  TOPIC_CACHE[test.id] = seen;
+  return seen;
+}
+function openTopicInfo(testId){
+  const test = testById(testId); if(!test) return;
+  const topics = topicsFor(test);
+  const body = topics.map(k=>`
+    <div class="topic-block">
+      <div class="help-body">${nl(helpText(k))}</div>
+      ${videoHTML(k)}
+    </div>`).join('');
+  showModal(`<button class="close-x" onclick="closeModal()">✕</button>
+    <h3>${test.icon} ${esc(test.title[LANG]||test.title.de)} — ${t('expTitle')}</h3>${body}`);
 }
 
 /* ---------- grading ---------- */
 function normNum(v){
   if(typeof v!=='string') v=String(v);
-  v = v.trim().replace(/\./g,'').replace(',','.');
+  v = v.trim().replace(/\s/g,'');
+  if(/^\d{1,3}(\.\d{3})+(,\d+)?$/.test(v)) v = v.replace(/\./g,'').replace(',','.');  // 4.320 or 4.320,5 → thousands dots
+  else v = v.replace(',','.');                                                        // 3,5 or 3.5 → decimal
   const n = parseFloat(v);
   return isNaN(n)?null:n;
 }
@@ -283,9 +337,8 @@ function gradeQ(q, given){
 }
 
 function finishTest(){
-  SES.answers[SES.idx]=collectAnswer();
-  const un = SES.answers.map((a,i)=>a===null?i+1:null).filter(x=>x);
-  if(un.length && !confirm(`${t('unanswered')} ${un.join(', ')}\n${t('confirmSubmit')}`)) return;
+  const firstUnchecked = SES.checked.findIndex(c=>c===null);
+  if(firstUnchecked !== -1){ SES.idx = firstUnchecked; renderQuestion(); return; }
   clearInterval(timerInt);
   const details = SES.qs.map((q,i)=>{
     const g = gradeQ(q, SES.answers[i]);

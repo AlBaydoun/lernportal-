@@ -100,6 +100,16 @@ const I18N = {
   attempt:{de:'Versuch',ru:'Попытка',en:'Attempt'},
   q_short:{de:'Fr.',ru:'В.',en:'Q'},
   start:{de:'Los geht’s!',ru:'Поехали!',en:'Let’s go!'},
+  subj_info:{de:'Informatik',ru:'Информатика',en:'Computer Science'},
+  check:{de:'Prüfen ✔',ru:'Проверить ✔',en:'Check ✔'},
+  fbRight:{de:'✔ Richtig! Super gemacht!',ru:'✔ Правильно! Молодец!',en:'✔ Correct! Well done!'},
+  fbWrong:{de:'✘ Leider nicht richtig. Beim nächsten Mal klappt es!',ru:'✘ Пока неверно. В следующий раз получится!',en:'✘ Not quite right. You’ll get it next time!'},
+  fbPartial:{de:'⭐ Teilweise richtig:',ru:'⭐ Частично правильно:',en:'⭐ Partly correct:'},
+  fbEmpty:{de:'☝️ Bitte beantworte zuerst die Frage!',ru:'☝️ Сначала ответь на вопрос!',en:'☝️ Please answer the question first!'},
+  explanation:{de:'📚 Erklärung',ru:'📚 Объяснение',en:'📚 Explanation'},
+  expTitle:{de:'Erklärung & Videos',ru:'Объяснение и видео',en:'Explanation & Videos'},
+  videos:{de:'Videos zum Thema',ru:'Видео по теме',en:'Videos on this topic'},
+  moreVideos:{de:'Mehr Videos auf YouTube finden',ru:'Найти ещё видео на YouTube',en:'Find more videos on YouTube'},
 };
 let LANG = 'de';
 function t(k){ const e = I18N[k]; if(!e) return k; return e[LANG] || e.de; }

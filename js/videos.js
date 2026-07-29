@@ -1,0 +1,107 @@
+/* ============ Video library: real explainer videos (DE + RU) per topic ============
+   Each topic: de/ru = verified videos [title, url]; qde/qru = YouTube search query (always works). */
+const VIDEOS = {
+division:{
+  de:[['Schriftliches Dividieren – Lehrerschmidt (Klasse 4)','https://www.youtube.com/watch?v=vKkSKYdDqmc'],
+      ['Schriftliches Dividieren mit Rest – Lehrerschmidt','https://www.youtube.com/watch?v=H63IJopwHNY'],
+      ['Division mit zweistelligem Divisor – Lehrerschmidt','https://www.youtube.com/watch?v=x0M3WFmBwi4']],
+  ru:[['Деление в столбик за 4 минуты','https://www.youtube.com/watch?v=e136C1dGMmE'],
+      ['Как научиться делить в столбик?','https://www.youtube.com/watch?v=QnfMp5AlXFU']],
+  qde:'schriftliche Division Klasse 4 erklärt', qru:'деление в столбик 4 класс'},
+divDigits:{ qde:'Überschlag Division Klasse 4', qru:'прикидка результата деления 4 класс'},
+wordDiv:{ qde:'Sachaufgaben Division Klasse 4 erklärt', qru:'задачи на деление 4 класс'},
+compare:{ qde:'Preise vergleichen Grundschule Mathe Angebote', qru:'как сравнить цены за 100 грамм математика'},
+remainder:{ qde:'Division mit Rest Klasse 4 erklärt', qru:'деление с остатком 4 класс'},
+multWritten:{
+  de:[['Schriftliches Multiplizieren – Lehrerschmidt (Klasse 4)','https://www.youtube.com/watch?v=QxIyeis2pyo'],
+      ['Schriftliches Multiplizieren (Malrechnen) – Lehrerschmidt','https://www.youtube.com/watch?v=DoLiVjAXu8c']],
+  ru:[['Умножение столбиком – как научиться?','https://www.youtube.com/watch?v=Vgriyx7WIhs'],
+      ['Умножение двузначных чисел в столбик','https://www.youtube.com/watch?v=juLRpqv0bOE']],
+  qde:'schriftliche Multiplikation Klasse 4', qru:'умножение в столбик 4 класс'},
+addSub:{ qde:'schriftliche Addition Subtraktion Klasse 4 Lehrerschmidt', qru:'сложение и вычитание в столбик 4 класс'},
+rounding:{ qde:'Runden von Zahlen Klasse 4 Lehrerschmidt', qru:'округление чисел 4 класс'},
+placeValue:{ qde:'Stellenwerttafel Klasse 4 erklärt', qru:'разряды и классы чисел 4 класс'},
+compareNum:{ qde:'Zahlen vergleichen größer kleiner Grundschule', qru:'сравнение многозначных чисел 4 класс'},
+units:{ qde:'Einheiten umrechnen Klasse 4 km m cm', qru:'единицы измерения перевод 4 класс'},
+timeCalc:{ qde:'Zeitspannen berechnen Klasse 4', qru:'задачи на время 4 класс'},
+geoLines:{ qde:'parallel und senkrecht Geodreieck Klasse 4', qru:'параллельные и перпендикулярные прямые 4 класс'},
+quadri:{ qde:'Quadrat Rechteck Parallelogramm Eigenschaften Klasse 4', qru:'квадрат прямоугольник свойства 4 класс'},
+periArea:{ qde:'Umfang und Flächeninhalt Rechteck Lehrerschmidt', qru:'периметр и площадь прямоугольника 4 класс'},
+coords:{ qde:'Koordinatensystem Klasse 5 einfach erklärt', qru:'координатная плоскость для детей'},
+divisibility:{ qde:'Teilbarkeitsregeln Klasse 5 erklärt', qru:'признаки делимости на 2 3 5 9'},
+orderOps:{ qde:'Punkt vor Strich einfach erklärt', qru:'порядок действий в математике'},
+wordProblem:{ qde:'Sachaufgaben lösen Klasse 4 Strategie', qru:'как решать текстовые задачи 4 класс'},
+mental:{ qde:'Kopfrechnen Tricks Grundschule', qru:'устный счёт приёмы 4 класс'},
+diagram:{ qde:'Diagramme lesen Grundschule erklärt', qru:'как читать диаграммы 4 класс'},
+wortarten:{
+  de:[['Die Wortarten – Überblick (Klasse 3/4)','https://www.youtube.com/watch?v=BvZIWweX6ww']],
+  qde:'Wortarten Nomen Verben Adjektive Grundschule', qru:'части речи в немецком языке для начинающих'},
+zeiten:{ qde:'Zeitformen Deutsch Grundschule Präteritum Perfekt', qru:'времена глагола в немецком языке просто'},
+faelle:{
+  de:[['Die 4 Fälle des Nomens (Klasse 4)','https://www.youtube.com/watch?v=GLnOzKAamAI'],
+      ['Die vier Fälle einfach erklärt (Klasse 5/6)','https://www.youtube.com/watch?v=dy6vCGVTDCM']],
+  ru:[['Падежи в немецком – простое объяснение (Akkusativ/Dativ)','https://www.youtube.com/watch?v=g54-GsrccOc'],
+      ['Немецкие падежи – самое простое объяснение','https://www.youtube.com/watch?v=tHB_e9dxgE0']],
+  qde:'die 4 Fälle Deutsch Klasse 4 erklärt', qru:'падежи в немецком языке для детей'},
+satzglieder:{ qde:'Satzglieder bestimmen Subjekt Prädikat Objekt Klasse 4', qru:'члены предложения в немецком языке'},
+satzarten:{ qde:'Satzarten Deutsch Grundschule', qru:'виды предложений в немецком языке'},
+rechtIE:{ qde:'Wörter mit ie Dehnungs-h Rechtschreibung Grundschule', qru:'правописание немецкий ie долгие гласные'},
+rechtDoppel:{ qde:'doppelte Konsonanten ck tz Rechtschreibung Grundschule', qru:'немецкая орфография двойные согласные'},
+rechtSS:{ qde:'ß oder ss Regel einfach erklärt', qru:'когда пишется ß а когда ss немецкий'},
+rechtEnd:{ qde:'Auslaut d t g k Verlängerungsprobe Grundschule', qru:'немецкая орфография конец слова'},
+grossklein:{ qde:'Großschreibung Kleinschreibung Nominalisierung Klasse 5', qru:'большая буква в немецком правило'},
+kommas:{ qde:'Kommasetzung Aufzählung Grundschule', qru:'запятые в немецком языке правила'},
+woertlRede:{ qde:'wörtliche Rede Zeichensetzung Klasse 4', qru:'прямая речь в немецком языке'},
+lesen:{ qde:'Leseverstehen Tipps Grundschule', qru:'как понять текст на немецком советы'},
+wortfamilie:{ qde:'Wortfamilie Wortfeld Deutsch Grundschule', qru:'словообразование в немецком языке'},
+nomen:{ qde:'Nomen Artikel Einzahl Mehrzahl Grundschule', qru:'существительные в немецком артикли множественное число'},
+verben:{ qde:'Verben konjugieren Grundform Grundschule', qru:'спряжение глаголов в немецком языке для детей'},
+adjektive:{ qde:'Adjektive steigern Vergleichsstufen Grundschule', qru:'прилагательные в немецком степени сравнения'},
+synonyme:{ qde:'Synonyme Antonyme Oberbegriffe Deutsch', qru:'синонимы и антонимы в немецком языке'},
+engVocab:{ qde:'Englisch Vokabeln lernen Klasse 5 Tipps', qru:'английские слова для детей учить'},
+engTobe:{ qde:'to be am is are einfach erklärt Klasse 5', qru:'глагол to be для детей объяснение'},
+engHave:{ qde:'have got has got einfach erklärt Klasse 5', qru:'have got has got правило для детей'},
+engSimplePres:{
+  de:[['Simple Present – einfach erklärt','https://www.youtube.com/watch?v=etQnHiespSM'],
+      ['Simple Present – Englisch 5. Klasse','https://www.youtube.com/watch?v=bnvhwHPHuw4']],
+  ru:[['Present Simple – всё проще, чем вы думаете!','https://www.youtube.com/watch?v=6Qd1xAikoQc']],
+  qde:'simple present einfach erklärt Klasse 5', qru:'present simple объяснение для детей'},
+engPlural:{ qde:'plural englisch regeln Klasse 5', qru:'множественное число в английском для детей'},
+engQuestions:{ qde:'question words Fragewörter Englisch Klasse 5', qru:'вопросительные слова в английском для детей'},
+engArticles:{ qde:'a oder an Regel Englisch', qru:'артикли a an в английском правило'},
+engCan:{ qde:'can can\'t einfach erklärt Englisch Klasse 5', qru:'глагол can для детей английский'},
+engTime:{ qde:'Uhrzeit Englisch Klasse 5 telling the time', qru:'время на английском для детей который час'},
+sachMap:{ qde:'Bundesländer Deutschland Grundschule erklärt', qru:'федеральные земли Германии для детей'},
+sachWater:{ qde:'Wasserkreislauf Grundschule erklärt', qru:'круговорот воды в природе для детей'},
+sachStrom:{ qde:'Stromkreis Grundschule erklärt', qru:'электрическая цепь для детей'},
+sachVerkehr:{ qde:'Fahrradprüfung Grundschule verkehrssicheres Fahrrad', qru:'правила дорожного движения для детей велосипед'},
+sachBody:{ qde:'menschlicher Körper Organe Grundschule', qru:'тело человека органы для детей'},
+kalender:{ qde:'Kalender Monate Jahreszeiten Grundschule', qru:'календарь месяцы времена года для детей'},
+bioMammal:{ qde:'Hund Katze Säugetiere Biologie Klasse 5', qru:'млекопитающие биология 5 класс собака кошка'},
+bioSkeleton:{ qde:'Skelett Mensch Biologie Klasse 5', qru:'скелет человека для детей биология'},
+bioVertebrates:{ qde:'Wirbeltiere 5 Klassen Biologie', qru:'позвоночные животные классы биология 5 класс'},
+bioFood:{ qde:'gesunde Ernährung Ernährungspyramide Klasse 5', qru:'здоровое питание пирамида для детей'},
+bioBirds:{ qde:'Vögel Biologie Klasse 5 Körperbau', qru:'птицы строение биология для детей'},
+geoWorld:{ qde:'Kontinente und Ozeane Klasse 5', qru:'континенты и океаны для детей'},
+geoGermany:{ qde:'Deutschland Bundesländer Flüsse Erdkunde Klasse 5', qru:'география Германии для детей'},
+geoMapSkills:{ qde:'Maßstab Karte berechnen Klasse 5', qru:'масштаб карты как считать для детей'},
+geoEurope:{ qde:'Europa Länder Hauptstädte Klasse 5', qru:'страны и столицы Европы для детей'},
+infoComputer:{ qde:'Wie funktioniert ein Computer EVA Prinzip Kinder', qru:'как устроен компьютер для детей'},
+infoInternet:{ qde:'Internet einfach erklärt für Kinder Sicherheit', qru:'интернет безопасность для детей'},
+infoScratch:{
+  de:[['Scratch Einführung – Tutorial für den Einstieg','https://www.youtube.com/watch?v=TWi9F1DiWJc'],
+      ['Scratch #01 – Einführung für Anfänger','https://www.youtube.com/watch?v=O-CNjHsYE20']],
+  ru:[['Scratch. Урок 1.2 – Первый скрипт (для детей)','https://www.youtube.com/watch?v=4z3lJnDlHoM']],
+  qde:'Scratch programmieren lernen Kinder deutsch', qru:'Скретч программирование для детей урок'},
+infoDaten:{ qde:'Dateien und Ordner Binärsystem Kinder erklärt', qru:'файлы и папки двоичная система для детей'},
+};
+function ytSearch(q){ return 'https://www.youtube.com/results?search_query=' + encodeURIComponent(q); }
+function videoHTML(topic){
+  const v = VIDEOS[topic]; if(!v) return '';
+  let h = `<div class="video-box"><div class="video-head">🎬 ${t('videos')}</div>`;
+  (v.de||[]).forEach(x=>{ h += `<a class="vid-link" href="${x[1]}" target="_blank" rel="noopener">🇩🇪 ▶ ${esc(x[0])}</a>`; });
+  (v.ru||[]).forEach(x=>{ h += `<a class="vid-link" href="${x[1]}" target="_blank" rel="noopener">🇷🇺 ▶ ${esc(x[0])}</a>`; });
+  if(v.qde) h += `<a class="vid-link search" href="${ytSearch(v.qde)}" target="_blank" rel="noopener">🇩🇪 🔍 ${t('moreVideos')}</a>`;
+  if(v.qru) h += `<a class="vid-link search" href="${ytSearch(v.qru)}" target="_blank" rel="noopener">🇷🇺 🔍 ${t('moreVideos')}</a>`;
+  return h + '</div>';
+}

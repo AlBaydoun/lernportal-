@@ -131,4 +131,83 @@ const TESTS_ENGLISH = [
     {t:'mc', q:'„break" bedeutet in der Schule ...', tr:{ru:'„break" в школе значит ...',en:'"break" at school means ...'}, opts:['Pause','Hausaufgabe','Zeugnis'], a:0, h:'engVocab', pts:1},
     {t:'mc', q:'Wie heißt „die Turnhalle" auf Englisch?', tr:{ru:'Как по-английски «спортзал»?',en:'What is "die Turnhalle" in English?'}, opts:['gym','swimming pool','playground'], a:0, h:'engVocab', pts:1},
   ]},
+
+/* ---------- Erweiterung: mehr Englisch-Tests ---------- */
+{ id:'e4-food', grade:4, subject:'english', icon:'🍎',
+  title:{de:'Food & Drinks',ru:'Еда и напитки',en:'Food & Drinks'},
+  desc:{de:'Essen und Trinken auf Englisch',ru:'Еда и напитки по-английски',en:'Food and drinks in English'},
+  qs:[
+    {t:'match', q:'Verbinde das Essen:', tr:{ru:'Соедини еду:',en:'Match the food:'},
+      pairs:[['apple','Apfel'],['bread','Brot'],['milk','Milch'],['cheese','Käse']], h:'engVocab', pts:4},
+    {t:'mc', q:'Wie heißt „das Wasser" auf Englisch?', tr:{ru:'Как по-английски «вода»?',en:'What is "das Wasser" in English?'}, opts:['water','juice','tea'], a:0, h:'engVocab', pts:1},
+    {t:'mc', q:'What do you eat for breakfast?', tr:{ru:'Что едят на завтрак? (выбери разумный ответ)',en:'What do you eat for breakfast?'}, opts:['cereal and toast','a football','my school bag'], a:0, h:'engVocab', pts:1},
+    {t:'mc', q:'Wie sagst du: „Ich mag Pizza"?', tr:{ru:'Как сказать: «Я люблю пиццу»?',en:'How do you say "Ich mag Pizza"?'}, opts:['I like pizza.','I am pizza.','I pizza like.'], a:0, h:'engVocab', pts:1},
+    {t:'mc', q:'Wie sagst du: „Ich mag keinen Käse"?', tr:{ru:'Как сказать: «Я не люблю сыр»?',en:'How do you say "Ich mag keinen Käse"?'}, opts:['I don’t like cheese.','I no like cheese.','I like no cheese.'], a:0, h:'engVocab', pts:1},
+    {t:'match', q:'Verbinde die Getränke und Süßes:', tr:{ru:'Соедини напитки и сладкое:',en:'Match drinks and sweets:'},
+      pairs:[['orange juice','Orangensaft'],['ice cream','Eis'],['cake','Kuchen'],['sweets','Süßigkeiten']], h:'engVocab', pts:4},
+    {t:'mc', q:'„I am hungry" bedeutet:', tr:{ru:'„I am hungry" значит:',en:'"I am hungry" means:'}, opts:['Ich habe Hunger.','Ich habe Durst.','Ich bin müde.'], a:0, h:'engVocab', pts:1},
+  ]},
+
+{ id:'e4-year', grade:4, subject:'english', icon:'🌦️',
+  title:{de:'Seasons, Months & Weather',ru:'Времена года, месяцы, погода',en:'Seasons, Months & Weather'},
+  desc:{de:'Jahreszeiten, Monate und das Wetter',ru:'Времена года, месяцы и погода',en:'Seasons, months and the weather'},
+  qs:[
+    {t:'match', q:'Verbinde die Jahreszeiten:', tr:{ru:'Соедини времена года:',en:'Match the seasons:'},
+      pairs:[['spring','Frühling'],['summer','Sommer'],['autumn','Herbst'],['winter','Winter']], h:'engVocab', pts:4},
+    {t:'mc', q:'Which is the first month of the year?', tr:{ru:'Какой первый месяц года?',en:'Which is the first month of the year?'}, opts:['January','February','December'], a:0, h:'engTime', pts:1},
+    {t:'mc', q:'Wie heißt „der Regen" auf Englisch?', tr:{ru:'Как по-английски «дождь»?',en:'What is "der Regen" in English?'}, opts:['rain','snow','wind'], a:0, h:'engVocab', pts:1},
+    {t:'mc', q:'„It is snowing" bedeutet:', tr:{ru:'„It is snowing" значит:',en:'"It is snowing" means:'}, opts:['Es schneit.','Es regnet.','Die Sonne scheint.'], a:0, h:'engVocab', pts:1},
+    {t:'num', q:'How many months has a year?', tr:{ru:'Сколько месяцев в году?',en:'How many months has a year?'}, a:12, h:'engTime', pts:1},
+    {t:'match', q:'Verbinde das Wetter:', tr:{ru:'Соедини погоду:',en:'Match the weather:'},
+      pairs:[['sunny','sonnig'],['cloudy','wolkig'],['windy','windig'],['rainy','regnerisch']], h:'engVocab', pts:4},
+    {t:'mc', q:'In which season do you build a snowman?', tr:{ru:'В какое время года лепят снеговика?',en:'In which season do you build a snowman?'}, opts:['in winter','in summer','in spring'], a:0, h:'engVocab', pts:1},
+  ]},
+
+{ id:'e5-can', grade:5, subject:'english', icon:'💪',
+  title:{de:'can & can’t',ru:'can и can’t',en:'can & can’t'},
+  desc:{de:'Sagen, was man kann und nicht kann',ru:'Говорим, что умеем и не умеем',en:'Saying what you can and can’t do'},
+  qs:[
+    {t:'mc', q:'„Ich kann schwimmen." heißt auf Englisch:', tr:{ru:'«Я умею плавать» по-английски:',en:'"Ich kann schwimmen" in English:'}, opts:['I can swim.','I can to swim.','I can swimming.'], a:0, h:'engCan', pts:1},
+    {t:'mc', q:'She ___ ride a bike.', tr:{ru:'Выбери: She ___ ride a bike.',en:'Choose: She ___ ride a bike.'}, opts:['can','cans','can to'], a:0, h:'engCan', pts:1},
+    {t:'mc', q:'Verneine richtig: „He can fly." →', tr:{ru:'Правильное отрицание: „He can fly." →',en:'Negate: "He can fly." →'}, opts:['He can’t fly.','He don’t can fly.','He no can fly.'], a:0, h:'engCan', pts:1},
+    {t:'mc', q:'Welche Frage ist richtig?', tr:{ru:'Какой вопрос правильный?',en:'Which question is correct?'}, opts:['Can you help me?','You can help me?','Do you can help me?'], a:0, h:'engCan', pts:1},
+    {t:'mc', q:'„Can you sing?" – Welche Antwort ist richtig?', tr:{ru:'„Can you sing?" – какой ответ правильный?',en:'"Can you sing?" – which answer is correct?'}, opts:['Yes, I can.','Yes, I sing.','Yes, I am.'], a:0, h:'engCan', pts:1},
+    {t:'mc', q:'The baby ___ walk yet.', tr:{ru:'Выбери: The baby ___ walk yet. (ещё не умеет)',en:'Choose: The baby ___ walk yet.'}, opts:['can’t','can','doesn’t can'], a:0, h:'engCan', pts:1},
+    {t:'mc', q:'Nach „can" steht das Verb ...', tr:{ru:'После „can" глагол стоит ...',en:'After "can" the verb is ...'}, opts:['in der Grundform (ohne s)','immer mit s','in der ing-Form'], a:0, h:'engCan', pts:1},
+    {t:'mc', q:'A fish ___ swim, but it ___ climb.', tr:{ru:'Выбери: A fish ___ swim, but it ___ climb.',en:'Choose: A fish ___ swim, but it ___ climb.'}, opts:['can / can’t','can’t / can','can / can'], a:0, h:'engCan', pts:1},
+  ]},
+
+{ id:'e5-time', grade:5, subject:'english', icon:'⏰',
+  title:{de:'Telling the Time',ru:'Который час?',en:'Telling the Time'},
+  desc:{de:'Uhrzeit, Tage und Monate auf Englisch',ru:'Время, дни и месяцы по-английски',en:'Time, days and months in English'},
+  qs:[
+    {t:'mc', q:'3:00 – What time is it?', tr:{ru:'3:00 – который час?',en:'3:00 – What time is it?'}, opts:['It’s three o’clock.','It’s three hours.','It’s clock three.'], a:0, h:'engTime', pts:1},
+    {t:'mc', q:'4:30 – What time is it?', tr:{ru:'4:30 – который час?',en:'4:30 – What time is it?'}, opts:['It’s half past four.','It’s half to four.','It’s four half.'], a:0, h:'engTime', pts:1},
+    {t:'mc', q:'7:15 – What time is it?', tr:{ru:'7:15 – который час?',en:'7:15 – What time is it?'}, opts:['It’s quarter past seven.','It’s quarter to seven.','It’s seven and quarter.'], a:0, h:'engTime', pts:1},
+    {t:'mc', q:'Wie fragt man nach der Uhrzeit?', tr:{ru:'Как спросить, который час?',en:'How do you ask for the time?'}, opts:['What time is it?','How много time?','When is the clock?'], a:0, h:'engTime', pts:1},
+    {t:'match', q:'Verbinde die Wochentage:', tr:{ru:'Соедини дни недели:',en:'Match the days:'},
+      pairs:[['Wednesday','Mittwoch'],['Thursday','Donnerstag'],['Saturday','Samstag'],['Sunday','Sonntag']], h:'engTime', pts:4},
+    {t:'mc', q:'Which month comes after June?', tr:{ru:'Какой месяц после июня?',en:'Which month comes after June?'}, opts:['July','May','August'], a:0, h:'engTime', pts:1},
+    {t:'tf', q:'Richtig oder falsch?\n„Im Englischen schreibt man Wochentage groß: Monday."', tr:{ru:'Верно ли: в английском дни недели пишутся с большой буквы?',en:'True or false: English weekdays are capitalised?'}, a:true, h:'engTime', pts:1},
+    {t:'num', q:'How many days has a week?', tr:{ru:'Сколько дней в неделе?',en:'How many days has a week?'}, a:7, h:'engTime', pts:1},
+  ]},
+
+{ id:'e5-reading', grade:5, subject:'english', icon:'📖',
+  title:{de:'Reading: My New School',ru:'Чтение: Моя новая школа',en:'Reading: My New School'},
+  desc:{de:'Dein erster englischer Lesetext!',ru:'Твой первый текст на английском!',en:'Your first English reading text!'},
+  reading:{title:'My New School',
+    text:`Hello! My name is Ben and I am eleven years old. I live in Paderborn with my mum, my dad and my little sister Mia. She is seven.
+My new school is great. My favourite subjects are maths and sport. We have six lessons every day. School starts at eight o'clock and finishes at one o'clock.
+In the big break I play football with my friends Tom and Leo. After school I do my homework. Then I can play computer games for thirty minutes – but only when my homework is finished!
+On Saturdays I have no school. I ride my bike in the park or I visit my grandma. She makes the best pancakes in the world!`},
+  qs:[
+    {t:'num', q:'How old is Ben?', tr:{ru:'Сколько лет Бену?',en:'How old is Ben?'}, a:11, h:'lesen', pts:1},
+    {t:'mc', q:'Who is Mia?', tr:{ru:'Кто такая Миа?',en:'Who is Mia?'}, opts:['Ben’s little sister','Ben’s mum','Ben’s friend'], a:0, h:'lesen', pts:1},
+    {t:'mc', q:'What are Ben’s favourite subjects?', tr:{ru:'Какие любимые предметы у Бена?',en:'What are Ben’s favourite subjects?'}, opts:['maths and sport','English and art','music and history'], a:0, h:'lesen', pts:1},
+    {t:'mc', q:'When does school start?', tr:{ru:'Когда начинаются уроки?',en:'When does school start?'}, opts:['at eight o’clock','at one o’clock','at seven o’clock'], a:0, h:'lesen', pts:1},
+    {t:'mc', q:'What does Ben do in the big break?', tr:{ru:'Что Бен делает на большой перемене?',en:'What does Ben do in the big break?'}, opts:['He plays football.','He does his homework.','He rides his bike.'], a:0, h:'lesen', pts:1},
+    {t:'num', q:'How many minutes can Ben play computer games?', tr:{ru:'Сколько минут Бен может играть в компьютер?',en:'How many minutes can Ben play computer games?'}, a:30, h:'lesen', pts:1},
+    {t:'tf', q:'True or false?\n„Ben has school on Saturdays."', tr:{ru:'Верно или неверно: «У Бена есть школа по субботам».',en:'True or false: "Ben has school on Saturdays."'}, a:false, h:'lesen', pts:1},
+    {t:'mc', q:'Who makes the best pancakes?', tr:{ru:'Кто печёт лучшие блины?',en:'Who makes the best pancakes?'}, opts:['Ben’s grandma','Ben’s mum','Ben’s sister'], a:0, h:'lesen', pts:1},
+  ]},
 ];

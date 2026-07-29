@@ -263,6 +263,38 @@ function qTwoStep(){
   return {t:'num', q:k[0], tr:{ru:k[3],en:k[4]}, a:k[1], unit:k[2], h:'wordProblem', pts:2};
 }
 
+function qChange(){
+  const items=[['ein Eis','мороженое','an ice cream'],['ein Comic-Heft','комикс','a comic book'],['ein Sandwich','сэндвич','a sandwich'],['einen Sticker-Pack','наклейки','a sticker pack'],['ein Getränk','напиток','a drink']];
+  const it=pick(items);
+  const cost=ri(24,470);                    // cents
+  const pay=cost<=480? pick([500,1000]) : 1000;
+  const back=(pay-cost)/100;
+  return {t:'num', q:`Du kaufst ${it[0]} für ${euro(cost)} und bezahlst mit ${pay/100} €.\nWie viel Rückgeld bekommst du? (in €, z. B. 1,55)`,
+    tr:{ru:`Ты покупаешь ${it[1]} за ${euro(cost)} и платишь ${pay/100} €. Сколько сдачи ты получишь? (в €, напр. 1,55)`,
+        en:`You buy ${it[2]} for ${euro(cost)} and pay with ${pay/100} €. How much change do you get? (in €, e.g. 1.55)`},
+    a:back, unit:'€', h:'units', pts:2};
+}
+function qPriceSum(){
+  const a=ri(120,480), b=ri(90,390);        // cents
+  return {t:'num', q:`Ein Heft kostet ${euro(a)}, ein Stift kostet ${euro(b)}.\nWie viel kosten beide zusammen? (in €)`,
+    tr:{ru:`Тетрадь стоит ${euro(a)}, ручка – ${euro(b)}. Сколько стоят обе вместе? (в €)`,
+        en:`A notebook costs ${euro(a)}, a pen costs ${euro(b)}. How much do both cost together? (in €)`},
+    a:(a+b)/100, unit:'€', h:'units', pts:1};
+}
+function qMental5(){
+  const kinds=[
+    ()=>{const a=ri(120,780),b=ri(120,780);return [`${a} + ${b}`,a+b];},
+    ()=>{const a=ri(400,990),b=ri(120,390);return [`${a} − ${b}`,a-b];},
+    ()=>{const a=ri(12,25),b=pick([4,5,6,8]);return [`${a} · ${b}`,a*b];},
+    ()=>{const b=pick([4,5,6,8]),q=ri(12,45);return [`${b*q} : ${b}`,q];},
+    ()=>{const a=ri(3,9);return [`${a} · 800`,a*800];},
+    ()=>{const a=pick([1200,1600,2400,3600]),b=pick([4,6,8]);return a%b===0?[`${fmt(a)} : ${b}`,a/b]:[`${fmt(1200)} : 4`,300];},
+    ()=>{const a=ri(25,75);return [`${a} · 11`,a*11];},
+  ];
+  const k=pick(kinds)();
+  return {t:'num', q:`Kopfrechnen:  ${k[0]} = ?`, tr:{ru:`Устный счёт: ${k[0]} = ?`,en:`Mental maths: ${k[0]} = ?`}, a:k[1], h:'mental', pts:1};
+}
+
 /* ---------- SVG figures ---------- */
 function svgRect(a,b){
   const w = Math.min(300, a*22), h = Math.min(190, b*22);

@@ -212,4 +212,40 @@ const TESTS_MATH = [
   title:{de:'Sachaufgaben Klasse 5',ru:'Текстовые задачи 5 класс',en:'Word Problems Grade 5'},
   desc:{de:'Mehrschrittige Probleme knacken',ru:'Решаем задачи в несколько действий',en:'Cracking multi-step problems'},
   gen(){ return [qTwoStep(),qTwoStep(),qTwoStep(),...qWordDivSetup(),qDuration(),qOrderOps()]; } },
+
+/* ---------- Erweiterung: mehr Mathe-Tests ---------- */
+{ id:'m4-money', grade:4, subject:'math', icon:'💶', genTest:true,
+  title:{de:'Geld & Rückgeld',ru:'Деньги и сдача',en:'Money & Change'},
+  desc:{de:'Einkaufen, Preise addieren, Rückgeld berechnen',ru:'Покупки, сложение цен, расчёт сдачи',en:'Shopping, adding prices, calculating change'},
+  gen(){ return [qChange(),qChange(),qChange(),qPriceSum(),qPriceSum(),
+    {t:'num', q:'Rechne um:  7 € = ▢ Cent', tr:{ru:'Переведи: 7 € = ▢ центов',en:'Convert: 7 € = ▢ cents'}, a:700, unit:'Cent', h:'units', pts:1},
+    {t:'num', q:'Rechne um:  350 Cent = ▢ €  (z. B. 3,50)', tr:{ru:'Переведи: 350 центов = ▢ € (напр. 3,50)',en:'Convert: 350 cents = ▢ €'}, a:3.5, unit:'€', h:'units', pts:1},
+    qTwoStep()]; } },
+
+{ id:'m4-mix-a', grade:4, subject:'math', icon:'🎡', genTest:true,
+  title:{de:'Großer Mathe-Mix A',ru:'Большой микс A',en:'Big Maths Mix A'},
+  desc:{de:'10 zufällige Aufgaben aus ALLEN Themen',ru:'10 случайных заданий из ВСЕХ тем',en:'10 random tasks from ALL topics'},
+  gen(){ const pool=[qLongDiv,qMultWritten,qAddBig,qSubBig,qRound,qPlace,qUnit,qRemainder,qDuration,qTwoStep,qMental,qCompareNums,qChange];
+    const qs=[]; for(let i=0;i<10;i++) qs.push(pick(pool)()); return qs; } },
+
+{ id:'m4-mix-b', grade:4, subject:'math', icon:'🎠', genTest:true,
+  title:{de:'Großer Mathe-Mix B',ru:'Большой микс B',en:'Big Maths Mix B'},
+  desc:{de:'Noch einmal 10 Überraschungs-Aufgaben',ru:'Ещё 10 заданий-сюрпризов',en:'Another 10 surprise tasks'},
+  gen(){ const pool=[qLongDiv,qMultWritten,qAddBig,qSubBig,qRound,qPlace,qUnit,qRemainder,qDuration,qTwoStep,qMental,qCompareNums,qPriceSum];
+    const qs=[]; for(let i=0;i<10;i++) qs.push(pick(pool)()); return qs; } },
+
+{ id:'m5-ka1', grade:5, subject:'math', icon:'📋', genTest:true,
+  title:{de:'Klassenarbeit Nr. 1 (Kl. 5)',ru:'Контрольная № 1 (5 кл.)',en:'Class Test No. 1 (Gr. 5)'},
+  desc:{de:'Große Zahlen, Rechnen, Größen – wie in der Schule',ru:'Большие числа, вычисления, величины – как в школе',en:'Big numbers, calculation, units – like at school'},
+  gen(){ return [qPlace(),qRound(),qCompareNums(),qAddBig(),qSubBig(),qMultWritten(),qLongDiv(),qOrderOps(),qUnit(),qUnit(),qTwoStep()]; } },
+
+{ id:'m5-ka2', grade:5, subject:'math', icon:'🗒️', genTest:true,
+  title:{de:'Klassenarbeit Nr. 2 (Kl. 5)',ru:'Контрольная № 2 (5 кл.)',en:'Class Test No. 2 (Gr. 5)'},
+  desc:{de:'Teilbarkeit, Geometrie, Sachaufgaben',ru:'Делимость, геометрия, задачи',en:'Divisibility, geometry, word problems'},
+  gen(){ return [qDivisible(),qDivisible(),qDivisible(),qPerimeter(),qArea(),...qQuadStatements(3),qOrderOps(),qTwoStep(),qDuration()]; } },
+
+{ id:'m5-mental', grade:5, subject:'math', icon:'🚀', genTest:true,
+  title:{de:'Kopfrechnen-Raketen (Kl. 5)',ru:'Ракеты устного счёта (5 кл.)',en:'Mental Maths Rockets (Gr. 5)'},
+  desc:{de:'12 schnelle Aufgaben mit größeren Zahlen',ru:'12 быстрых примеров с большими числами',en:'12 quick tasks with bigger numbers'},
+  gen(){ const qs=[]; for(let i=0;i<12;i++) qs.push(qMental5()); return qs; } },
 ];

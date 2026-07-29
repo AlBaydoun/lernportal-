@@ -190,6 +190,25 @@ select.sel-test{font-size:1rem;font-weight:700;padding:10px;border-radius:12px;b
 
 #confetti{position:fixed;inset:0;pointer-events:none;z-index:200}
 
+/* ============ instant feedback ============ */
+.fb-banner{margin-top:16px;padding:14px 18px;border-radius:14px;font-weight:800;font-size:1.05rem;animation:popin .3s}
+.fb-banner.ok{background:#e8fff1;border:3px solid var(--green);color:#0e7a43}
+.fb-banner.bad{background:#ffecef;border:3px solid var(--red);color:#b0212f}
+.fb-banner.half{background:#fff6e3;border:3px solid var(--orange);color:#a95f00}
+.fb-banner.empty{background:#eef3ff;border:3px solid var(--blue);color:#1d5fa3}
+.ans-area.locked{opacity:.75;pointer-events:none}
+
+/* ============ explanation & videos ============ */
+.exp-btn{margin-top:10px;width:100%;border:none;border-radius:10px;padding:7px 10px;font-weight:800;font-size:.78rem;
+  cursor:pointer;background:#f1efff;color:var(--purple-d);transition:.2s}
+.exp-btn:hover{background:var(--purple);color:#fff}
+.topic-block{border:2px solid #eee;border-radius:14px;padding:14px;margin:12px 0}
+.video-box{margin-top:12px;background:#fff5f0;border-radius:12px;padding:10px 14px}
+.video-head{font-weight:800;color:#c0392b;margin-bottom:6px}
+.vid-link{display:block;font-weight:700;color:#1d5fa3;text-decoration:none;padding:5px 8px;border-radius:8px;margin:2px 0;font-size:.92rem}
+.vid-link:hover{background:#e8f1ff}
+.vid-link.search{color:#777}
+
 .back-link{display:inline-flex;align-items:center;gap:6px;margin-top:10px;font-weight:800;color:#4b3fae;cursor:pointer;background:rgba(255,255,255,.7);padding:8px 16px;border-radius:999px;border:none;font-size:.9rem}
 
 @media(max-width:640px){
