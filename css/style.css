@@ -216,6 +216,57 @@ select.sel-test{font-size:1rem;font-weight:700;padding:10px;border-radius:12px;b
 .player-16x9{position:relative;width:100%;aspect-ratio:16/9;border-radius:14px;overflow:hidden;background:#000;box-shadow:0 10px 30px rgba(0,0,0,.4)}
 .player-16x9 iframe{width:100%;height:100%;border:0}
 
+/* ============ daily gadget panel ============ */
+.gadget-panel{background:rgba(255,255,255,.92);border-radius:20px;padding:14px 20px;max-width:520px;margin:6px auto 4px;
+  box-shadow:var(--shadow);text-align:center}
+.gadget-head{font-family:'Fredoka';font-size:1.15rem;color:var(--purple-d)}
+.gadget-bar{height:16px;background:#e8e6ff;border-radius:999px;margin:10px 0 6px;overflow:hidden}
+.gadget-bar>div{height:100%;border-radius:999px;transition:width .5s;
+  background:linear-gradient(90deg,#26de81,#fed330,#fd79a8);background-size:200% 100%;animation:shimmer 3s linear infinite}
+.gadget-hint{font-size:.78rem;color:#777;font-weight:700}
+
+/* ============ clapping / shake feedback ============ */
+.clap-burst{position:fixed;inset:0;pointer-events:none;z-index:210;display:flex;align-items:center;justify-content:center;gap:26px}
+.clap-burst span{font-size:3.4rem;animation:clapPop 1.3s ease-out forwards;filter:drop-shadow(0 6px 12px rgba(0,0,0,.3))}
+.clap-burst span:nth-child(2){animation-delay:.09s}
+.clap-burst span:nth-child(3){animation-delay:.18s}
+.clap-burst span:nth-child(4){animation-delay:.27s}
+.clap-burst span:nth-child(5){animation-delay:.36s}
+@keyframes clapPop{
+  0%{transform:scale(.2) translateY(30px) rotate(-20deg);opacity:0}
+  35%{transform:scale(1.35) translateY(-10px) rotate(8deg);opacity:1}
+  60%{transform:scale(1.1) translateY(-16px) rotate(-6deg);opacity:1}
+  100%{transform:scale(.9) translateY(-90px) rotate(0);opacity:0}}
+.fb-banner .clap{display:inline-block;animation:clapWave .5s ease-in-out 3;font-size:1.3rem}
+@keyframes clapWave{0%,100%{transform:rotate(-14deg) scale(1)}50%{transform:rotate(14deg) scale(1.2)}}
+.qcard.shake{animation:shakeX .45s}
+@keyframes shakeX{0%,100%{transform:translateX(0)}20%{transform:translateX(-11px)}40%{transform:translateX(11px)}60%{transform:translateX(-7px)}80%{transform:translateX(7px)}}
+.lesson-tag{display:block;margin-top:10px;background:#fff;border:2px solid currentColor;border-radius:12px;padding:7px 12px;
+  font-weight:800;font-size:.85rem;cursor:pointer;font-family:'Nunito';color:inherit;width:100%;text-align:left}
+.lesson-tag:hover{background:rgba(255,255,255,.6)}
+
+/* ============ lessons ============ */
+.lesson-card{border-top-color:var(--teal)}
+.gen-badge.done{background:var(--green)}
+.lesson-view{background:rgba(255,255,255,.95);border-radius:24px;box-shadow:var(--shadow);padding:22px;margin-top:12px}
+.lesson-head{display:flex;align-items:center;gap:14px;margin-bottom:14px}
+.s-ico.big{font-size:2.6rem;filter:drop-shadow(2px 3px 3px rgba(0,0,0,.25))}
+.lesson-head h2{color:var(--purple-d);font-size:1.35rem;line-height:1.2}
+.lesson-head small{color:#888;font-weight:800}
+.lesson-theory{background:#faf9ff;border-radius:16px;padding:18px;line-height:1.7;font-size:1rem;white-space:pre-wrap;border-left:6px solid var(--purple)}
+.lesson-actions{margin-top:16px;display:flex;gap:10px;flex-wrap:wrap}
+.lesson-sub{margin:20px 0 10px;color:var(--purple-d)}
+
+/* ============ review after test ============ */
+.review-box{background:#fff;border-radius:18px;padding:16px;max-width:520px;margin:16px auto;box-shadow:var(--shadow);text-align:left}
+.review-box h3{color:var(--purple-d);font-size:1.05rem;margin-bottom:4px}
+.review-hint{font-size:.8rem;color:#777;font-weight:700;margin-bottom:10px}
+.review-item{display:flex;justify-content:space-between;align-items:center;gap:10px;width:100%;background:#f1efff;border:none;
+  border-radius:12px;padding:11px 14px;margin:6px 0;cursor:pointer;font-family:'Nunito';transition:.2s;text-align:left}
+.review-item:hover{background:var(--purple);color:#fff}
+.ri-title{font-weight:800;font-size:.92rem}
+.ri-meta{font-size:.78rem;opacity:.8;font-weight:700;white-space:nowrap}
+
 /* ============ adventure map ============ */
 .map-head{text-align:center;margin-top:8px}
 .map-head h2{color:#3a2f8f;font-size:1.5rem}

@@ -1,11 +1,12 @@
 /* ============ Lernportal core app ============ */
 const LS_KEY = 'lernportal_v1';
-const ALL_TESTS = [...TESTS_MATH, ...TESTS_GERMAN, ...TESTS_ENGLISH, ...TESTS_OTHER, ...TESTS_INFO,
-                   ...TESTS_CORE_HIGH, ...TESTS_SUBJ_HIGH, ...LEVEL_TESTS];
-const SUBJECT_ORDER = ['math','german','english','franz','info','sach','bio','physik','chemie','geo','geschichte','politik'];
-const SUBJECT_ICON = {math:'🔢',german:'📖',english:'🇬🇧',franz:'🇫🇷',info:'💻',sach:'🔬',bio:'🌿',
+const ALL_TESTS = [...TESTS_G1_3, ...TESTS_MATH, ...TESTS_GERMAN, ...TESTS_ENGLISH, ...TESTS_OTHER, ...TESTS_INFO,
+                   ...TESTS_CORE_HIGH, ...TESTS_SUBJ_HIGH, ...TESTS_LANG, ...LEVEL_TESTS];
+const SUBJECT_ORDER = ['math','german','english','franz','spanisch','russisch','info','sach','bio','physik','chemie','geo','geschichte','politik'];
+const SUBJECT_ICON = {math:'🔢',german:'📖',english:'🇬🇧',franz:'🇫🇷',spanisch:'🇪🇸',russisch:'🇷🇺',info:'💻',sach:'🔬',bio:'🌿',
                       physik:'🔭',chemie:'🧪',geo:'🌍',geschichte:'🏛️',politik:'🗳️'};
-const GRADES = [4,5,6,7,8,9,10];
+const GRADES = [1,2,3,4,5,6,7,8,9,10];
+const DAILY_CAP = 120;   // maximum gadget minutes per day
 const MAX_ATTEMPTS = 2;
 
 /* ---------- state ---------- */
@@ -67,8 +68,28 @@ function totalEarned(){
   return ids.reduce((sum,id)=>sum+creditsFor(bestPct(id)||0), 0);
 }
 function balance(){ return totalEarned() + S.adj.reduce((s,a)=>s+a.min,0); }
+
+/* ---------- daily gadget time: earned fresh every day, capped at 2 h ---------- */
+function gadgetMinutesFor(dayKey){
+  const rs = S.results.filter(r=>resultDay(r)===dayKey);
+  const best = {};
+  rs.forEach(r=>{ best[r.testId] = Math.max(best[r.testId]||0, r.pct); });
+  let mins = Object.values(best).reduce((s,p)=>s+creditsFor(p), 0);
+  mins += S.adj.filter(a=>a.day===dayKey).reduce((s,a)=>s+a.min, 0);
+  return Math.max(0, Math.min(DAILY_CAP, mins));
+}
+function gadgetToday(){ return gadgetMinutesFor(todayKey()); }
+function updateGadgetChip(){
+  const el = document.getElementById('gadgetVal');
+  if(el) el.textContent = gadgetToday() + '/' + DAILY_CAP;
+  const top = document.getElementById('gadgetTop');
+  if(top) top.textContent = gadgetToday();
+  const bar = document.getElementById('gadgetBar');
+  if(bar) bar.style.width = (gadgetToday()/DAILY_CAP*100) + '%';
+}
 function starsFor(pct){ return pct>=90?'⭐⭐⭐' : pct>=70?'⭐⭐' : pct>=50?'⭐' : '☆'; }
-function updateChip(){ $('#creditVal').textContent = balance(); updateDayChip(); }
+function updateChip(){ $('#creditVal').textContent = balance(); updateDayChip(); updateGadgetChip(); }
+function resultDay(r){ return r.day || dayKeyOf(new Date(r.id)); }
 
 /* ---------- i18n render ---------- */
 function applyLang(){
@@ -96,12 +117,19 @@ function renderHome(){
   updateChip(); applyLang();
   const mode = S.mode || 'training';
   let html = `<div class="hero"><h1>${t('heroTitle')}</h1><p>${t('heroSub')}</p></div>
+  <div class="gadget-panel">
+    <div class="gadget-head">🎮 ${t('gadgetToday')}: <b><span id="gadgetVal">0/${DAILY_CAP}</span> ${t('min')}</b></div>
+    <div class="gadget-bar"><div id="gadgetBar" style="width:0%"></div></div>
+    <div class="gadget-hint">${t('gadgetHint')}</div>
+  </div>
   <div class="grade-tabs">
     <button class="gtab ${mode==='training'?'active':''}" onclick="setMode('training')">${t('mode_training')}</button>
+    <button class="gtab ${mode==='lessons'?'active':''}" onclick="setMode('lessons')">${t('mode_lessons')}</button>
     <button class="gtab ${mode==='map'?'active':''}" onclick="setMode('map')">${t('mode_map')}</button>
   </div>`;
-  html += (mode==='map') ? renderMap() : renderTraining();
+  html += mode==='map' ? renderMap() : mode==='lessons' ? renderLessons() : renderTraining();
   $('#app').innerHTML = html;
+  updateGadgetChip();          // panel exists only after innerHTML is set
   if(mode==='map' && allLevelsDone() && !S.champShown){ S.champShown = true; save(); confettiBurst(); }
   window.scrollTo(0,0);
 }
@@ -156,6 +184,95 @@ function startLevel(i){
     return;
   }
   startTest(pick(avail), L.id);
+}
+
+/* ---------- LESSONS ---------- */
+const WB_CACHE = {};
+function workbookFor(key){
+  if(WB_CACHE[key]) return WB_CACHE[key];
+  const found = [];
+  ALL_TESTS.forEach(test=>{
+    let qs;
+    try { qs = test.genTest ? test.gen() : test.qs; } catch(e){ return; }
+    qs.forEach(q=>{ if(q.h===key) found.push(JSON.parse(JSON.stringify(q))); });
+  });
+  WB_CACHE[key] = shuf(found).slice(0,8);
+  return WB_CACHE[key];
+}
+function lessonsDone(){ return S.lessonsSeen || (S.lessonsSeen = {}); }
+function renderLessons(){
+  const grade = VIEW.lgrade===undefined ? 4 : VIEW.lgrade;
+  const gicon = {1:'🐣',2:'🐥',3:'🦉',4:'🎒',5:'🚀',6:'🌟',7:'⚡',8:'🔥',9:'💎',10:'🎓'};
+  let html = `<div class="grade-tabs sub">` +
+    GRADES.map(g=>`<button class="gtab ${grade===g?'active':''}" onclick="VIEW.lgrade=${g};renderHome()">${gicon[g]} ${t('gradeShort')} ${g}</button>`).join('') +
+    `<button class="gtab ${grade===0?'active':''}" onclick="VIEW.lgrade=0;renderHome()">✨ ${t('allGrades')}</button></div>`;
+  const seen = lessonsDone();
+  let any = false;
+  for(const subj of SUBJECT_ORDER){
+    const ls = Object.values(LESSONS).filter(l=>l.subject===subj && (grade===0 || l.grade===grade));
+    if(!ls.length) continue;
+    any = true;
+    html += `<div class="subject-block">
+      <div class="subject-head"><span class="s-ico">${SUBJECT_ICON[subj]}</span><h2>${t('subj_'+subj)}</h2>
+      <span class="cnt">${ls.length} ${t('lessonsWord')}</span></div><div class="tests-grid">`;
+    ls.forEach(l=>{
+      const hasVid = !!VIDEOS[l.key];
+      html += `<div class="tcard"><div class="tcard-in lesson-card" onclick="openLesson('${l.key}')">
+        ${seen[l.key] ? `<div class="gen-badge done">✓ ${t('lessonDone')}</div>`:''}
+        <div class="big-ico">${SUBJECT_ICON[subj]}</div>
+        <h3>${esc(lessonTitle(l.key))}</h3>
+        <div class="desc">${t('gradeShort')} ${l.grade}${hasVid ? ' · 🎬 '+t('withVideo') : ''}</div>
+        <button class="exp-btn">${t('openLesson')}</button>
+      </div></div>`;
+    });
+    html += `</div></div>`;
+  }
+  if(!any) html += `<p style="text-align:center;font-weight:700;color:#fff">${t('noLessons')}</p>`;
+  return html;
+}
+function openLesson(key){
+  const l = LESSONS[key]; if(!l) return;
+  lessonsDone()[key] = true; save();
+  const tests = ALL_TESTS.filter(test=>{
+    if(test.levelOnly) return false;
+    try { const qs = test.genTest ? test.gen() : test.qs; return qs.some(q=>q.h===key); }
+    catch(e){ return false; }
+  }).slice(0,6);
+  VIEW = {name:'lesson', key};
+  const wb = workbookFor(key);
+  $('#app').innerHTML = `
+    <button class="back-link" onclick="goHome()">${t('backHome')}</button>
+    <div class="lesson-view">
+      <div class="lesson-head">
+        <span class="s-ico big">${SUBJECT_ICON[l.subject]}</span>
+        <div><h2>${esc(lessonTitle(key))}</h2>
+        <small>${t('subj_'+l.subject)} · ${t('gradeShort')} ${l.grade}</small></div>
+      </div>
+      <div class="lesson-theory">${nl(helpText(key))}</div>
+      ${videoHTML(key)}
+      <div class="lesson-actions">
+        ${wb.length ? `<button class="btn primary" onclick="startWorkbook('${key}')">📝 ${t('workbook')} (${wb.length})</button>`:''}
+      </div>
+      ${tests.length ? `<h3 class="lesson-sub">${t('relatedTests')}</h3>
+        <div class="tests-grid">${tests.map(test=>{
+          const left = attemptsLeft(test.id);
+          return `<div class="tcard"><div class="tcard-in" onclick="startTest('${test.id}')">
+            <div class="big-ico">${test.icon}</div>
+            <h3>${esc(test.title[LANG]||test.title.de)}</h3>
+            <div class="tcard-meta"><span class="att-badge ${left<=0?'locked':''}">${left<=0?'🔒':left+' × '+t('attemptsLeft')}</span></div>
+          </div></div>`;}).join('')}</div>`:''}
+    </div>`;
+  window.scrollTo(0,0);
+}
+function startWorkbook(key){
+  const qs = JSON.parse(JSON.stringify(workbookFor(key)));
+  if(!qs.length) return;
+  qs.forEach(q=>{ if(q.t==='mc' && !q.noshuffle){ const p=shuf(q.opts.map((_,i)=>i)); q.opts=p.map(i=>q.opts[i]); q.a=p.indexOf(q.a); } });
+  SES = { test:{id:'wb-'+key, icon:'📝', title:{de:t('workbook')+': '+lessonTitle(key),ru:t('workbook')+': '+lessonTitle(key),en:t('workbook')+': '+lessonTitle(key)}},
+          qs, idx:0, answers:new Array(qs.length).fill(null), checked:new Array(qs.length).fill(null),
+          helpUsed:0, started:Date.now(), showTr:false, levelId:null, practice:true, lessonKey:key };
+  VIEW = {name:'test'};
+  renderQuestion();
 }
 
 /* ---------- training mode (subject browser) ---------- */
@@ -239,7 +356,7 @@ function renderQuestion(){
     ${q.svg ? `<div class="qsvg">${q.svg}</div>` : ''}
     <div id="transBox"></div>
     <div class="ans-area" id="ansArea">${answerHTML(q)}</div>
-    <div id="fbArea">${chk ? fbBanner(chk) : ''}</div>
+    <div id="fbArea">${chk ? fbBanner(chk, q) : ''}</div>
     <div class="q-tools">
       <button class="tool-btn help-btn" onclick="openHelp('${q.h||''}')">💡 ${t('help')}</button>
       ${q.tr ? `<button class="tool-btn tr-btn" onclick="toggleTr()">🌐 ${t('translate')}</button>` : ''}
@@ -262,10 +379,34 @@ function renderQuestion(){
   window.scrollTo(0,0);
   startTimer();
 }
-function fbBanner(chk){
-  if(chk.pts===chk.max) return `<div class="fb-banner ok">${t('fbRight')}</div>`;
-  if(chk.pts>0) return `<div class="fb-banner half">${t('fbPartial')} ${chk.pts}/${chk.max}</div>`;
-  return `<div class="fb-banner bad">${t('fbWrong')}</div>`;
+function lessonTag(q){
+  if(!q.h || !lessonExists(q.h)) return '';
+  return `<button class="lesson-tag" onclick="openLesson('${q.h}')">📖 ${t('fromLesson')}: ${esc(lessonTitle(q.h))} ›</button>`;
+}
+function fbBanner(chk, q){
+  const tag = lessonTag(q||{});
+  if(chk.pts===chk.max) return `<div class="fb-banner ok"><span class="clap">👏</span> ${t('fbRight')}</div>`;
+  if(chk.pts>0) return `<div class="fb-banner half">${t('fbPartial')} ${chk.pts}/${chk.max}${tag}</div>`;
+  return `<div class="fb-banner bad">${t('fbWrong')}${tag}
+    ${SES && SES.practice ? `<button class="mini-btn" style="margin-top:8px" onclick="retryQuestion()">🔄 ${t('tryAgain')}</button>`:''}</div>`;
+}
+function retryQuestion(){
+  SES.checked[SES.idx] = null;
+  SES.answers[SES.idx] = null;
+  renderQuestion();
+}
+/* clapping hands celebration */
+function clapBurst(){
+  const wrap = document.createElement('div');
+  wrap.className = 'clap-burst';
+  wrap.innerHTML = '<span>👏</span><span>👏</span><span>🎉</span><span>👏</span><span>⭐</span>';
+  document.body.appendChild(wrap);
+  setTimeout(()=>wrap.remove(), 1400);
+}
+function shakeCard(){
+  const c = document.querySelector('.qcard');
+  if(!c) return;
+  c.classList.remove('shake'); void c.offsetWidth; c.classList.add('shake');
 }
 function lockAnswers(){
   const area = $('#ansArea'); if(!area) return;
@@ -283,6 +424,7 @@ function checkAnswer(){
   const g = gradeQ(q, given);
   SES.checked[SES.idx] = {pts:g.pts, max:g.max};
   renderQuestion();
+  if(g.pts===g.max) clapBurst(); else shakeCard();
 }
 let timerInt = null;
 function startTimer(){
@@ -436,9 +578,26 @@ function finishTest(){
   const firstUnchecked = SES.checked.findIndex(c=>c===null);
   if(firstUnchecked !== -1){ SES.idx = firstUnchecked; renderQuestion(); return; }
   clearInterval(timerInt);
+  if(SES.practice){                       // workbook: no grade, no attempt cost
+    const pts = SES.checked.reduce((s,c)=>s+c.pts,0);
+    const max = SES.checked.reduce((s,c)=>s+c.max,0);
+    const key = SES.lessonKey;
+    const pct = Math.round(pts/max*100);
+    SES = null;
+    showModal(`<button class="close-x" onclick="closeModal()">✕</button>
+      <h3>📝 ${t('workbookDone')}</h3>
+      <p style="font-size:1.4rem;font-weight:800;text-align:center">${pts} / ${max} ${t('points')} (${pct}%)</p>
+      <p class="hint" style="text-align:center">${t('workbookNote')}</p>
+      <div style="text-align:center;margin-top:14px">
+        <button class="btn primary" onclick="closeModal();startWorkbook('${key}')">🔄 ${t('retry')}</button>
+        <button class="btn ghost" onclick="closeModal();openLesson('${key}')">📖 ${t('backToLesson')}</button>
+      </div>`);
+    if(pct>=80) clapBurst();
+    return;
+  }
   const details = SES.qs.map((q,i)=>{
     const g = gradeQ(q, SES.answers[i]);
-    return { q:q.q, given:g.givenDisp, correct:g.correctDisp, pts:g.pts, max:g.max, h:q.h||null };
+    return { q:q.q, given:g.givenDisp, correct:g.correctDisp, pts:g.pts, max:g.max, h:q.h||null, qShort:q.q.split('\n')[0].slice(0,70) };
   });
   const pts = details.reduce((s,d)=>s+d.pts,0);
   const max = details.reduce((s,d)=>s+d.max,0);
@@ -463,6 +622,21 @@ function finishTest(){
 }
 
 /* ---------- RESULT ---------- */
+function reviewList(res){
+  const wrong = res.details.map((d,i)=>({...d, n:i+1})).filter(d=>d.pts<d.max && d.h && lessonExists(d.h));
+  if(!wrong.length) return `<p class="res-note" style="color:var(--green);font-weight:800">🎯 ${t('noReview')}</p>`;
+  const byLesson = {};
+  wrong.forEach(d=>{ (byLesson[d.h] = byLesson[d.h] || []).push(d.n); });
+  return `<div class="review-box">
+    <h3>📖 ${t('reviewTitle')}</h3>
+    <p class="review-hint">${t('reviewHint')}</p>
+    ${Object.entries(byLesson).map(([key,ns])=>`
+      <button class="review-item" onclick="openLesson('${key}')">
+        <span class="ri-title">${esc(lessonTitle(key))}</span>
+        <span class="ri-meta">${t('q_short')} ${ns.join(', ')} ›</span>
+      </button>`).join('')}
+  </div>`;
+}
 function renderResult(res){
   updateChip();
   const color = res.pct>=80?'linear-gradient(135deg,#26de81,#20bf6b)': res.pct>=50?'linear-gradient(135deg,#fdcb6e,#e17055)':'linear-gradient(135deg,#fc5c65,#eb3b5a)';
@@ -486,6 +660,7 @@ function renderResult(res){
     <div><span class="credit-earn"><span class="coin">🪙</span> +${credits} ${t('min')} ${t('earned')}</span></div>
     <p class="res-note">${msg}</p>
     <div class="qdots">${dots}</div>
+    ${reviewList(res)}
     <p class="res-note" style="font-size:.8rem">⏱ ${fmtTime(res.durationSec)} · 💡 ${res.helpUsed}× ${t('helpUsed')}</p>
     <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-top:14px">
       <button class="btn ghost" onclick="goHome()">${res.level ? t('backToMap') : t('home')}</button>

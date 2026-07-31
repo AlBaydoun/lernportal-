@@ -40,7 +40,6 @@ function renderAdmin(){
 }
 
 /* ---- daily log tab ---- */
-function resultDay(r){ return r.day || dayKeyOf(new Date(r.id)); }
 function fmtDayLabel(k){
   const [y,m,d] = k.split('-');
   return `${d}.${m}.${y}`;
@@ -164,10 +163,16 @@ function resetAttempts(id){ delete S.attempts[id]; delete S.extra[id]; save(); r
 function adminCredits(){
   const adjRows = [...S.adj].reverse().map(a=>
     `<tr><td>${esc(a.date)}</td><td style="font-weight:800;color:${a.min<0?'var(--red)':'var(--green)'}">${a.min>0?'+':''}${a.min} ${t('min')}</td><td>${esc(a.note||'')}</td></tr>`).join('');
-  return `<h3>${t('tab_credits')}</h3>
-  <p>${t('balance')}: <span class="balance-big">${balance()} ${t('min')}</span></p>
-  <p style="font-weight:700;color:#666">${t('totalEarned')}: ${totalEarned()} ${t('min')}</p>
-  <p class="hint">${t('creditRules')}</p>
+  const last7 = [...new Set([...Object.keys(S.days||{}), ...S.results.map(r=>resultDay(r))])].sort().reverse().slice(0,7);
+  return `<h3>${t('tab_gadget')}</h3>
+  <p>${t('earnedToday')}: <span class="balance-big">${gadgetToday()} / ${DAILY_CAP} ${t('min')}</span></p>
+  <p class="hint">${t('dailyRules')}</p>
+  ${last7.length?`<div style="overflow-x:auto"><table class="res-table">
+    <tr><th>${t('date')}</th><th>🎮 ${t('gadgetToday')}</th><th>${t('testsDone')}</th></tr>
+    ${last7.map(k=>`<tr><td>${fmtDayLabel(k)}</td><td><b>${gadgetMinutesFor(k)} ${t('min')}</b></td><td>${dayResults(k).length}</td></tr>`).join('')}
+  </table></div>`:''}
+  <h3 style="margin-top:18px">${t('tab_credits')}</h3>
+  <p style="font-weight:700;color:#666">${t('totalEarned')} (${t('allGrades')}): ${totalEarned()} ${t('min')} · ${t('balance')}: ${balance()} ${t('min')}</p>
   <h3 style="margin-top:18px">${t('adjustments')}</h3>
   <div class="adj-form">
     <input type="number" id="adjMin" placeholder="${t('minutes')}" style="width:130px">
@@ -179,7 +184,7 @@ function adminCredits(){
 function addAdj(){
   const min = parseInt($('#adjMin').value,10);
   if(isNaN(min)||min===0) return;
-  S.adj.push({date:new Date().toLocaleString('de-DE',{dateStyle:'short',timeStyle:'short'}), min, note:$('#adjNote').value.trim()});
+  S.adj.push({date:new Date().toLocaleString('de-DE',{dateStyle:'short',timeStyle:'short'}), day:todayKey(), min, note:$('#adjNote').value.trim()});
   save(); renderAdmin();
 }
 

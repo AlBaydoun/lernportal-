@@ -10,15 +10,25 @@ All progress, results and credits are saved automatically in that browser (local
 > Tip: put a shortcut to `index.html` on the desktop of the computer/tablet he uses.
 > Important: always use the **same browser on the same device**, otherwise results are stored separately.
 
-## Two modes
+## 🎮 Daily gadget time (the whole point)
 
-**📚 Freies Training (start page)** — browse by grade (4 → 10) and subject, pick any test directly.
+Every day he starts at **0 minutes** and earns gadget time by working on the platform, up to **120 minutes (2 h) per day**. A meter at the top shows the current balance live.
+
+Per test, the **best attempt of that day** counts: ≥90 % → 30 min · ≥80 % → 20 · ≥70 % → 15 · ≥60 % → 10 · ≥50 % → 5 min. **At midnight everything resets to 0** — so gadget time has to be re-earned every single day. The admin panel (🎮 Gadget-Zeit tab) shows today's total plus the last 7 days, and you can add or subtract minutes manually (e.g. `-30` after he used the tablet).
+
+## Three modes
+
+**📚 Freies Training (start page)** — browse by grade (1 → 10) and subject, pick any test directly.
+
+**🎓 Lektionen** — **147 lessons** from Klasse 1 to Klasse 10. Each lesson has the full explanation in German, Russian and English, the matching explainer videos (playable in-page), an **Übungsheft** (workbook: practice questions that never count towards grades and can be repeated endlessly), and links to the real tests on that topic. This is the section for daily learning.
 
 **🗺️ Abenteuer** — a game map with **54 levels** from ⭐ Starter through 👑 Champion (Kl. 5) and on through 🌟 Klasse 6, ⚡ 7, 🔥 8, 💎 9 up to 🎓 Klasse 10 – Abschluss. Each level randomly draws one test from a themed pool (**all 139 tests** are woven into the path). Pass with **≥ 60 %** to unlock the next node; stars show his best score. Videos **play directly in a pop-up player** inside the site.
 
 ## What's inside
 
-- **139 tests** covering **Klasse 4 to Klasse 10** (Realschule NRW) — his full school career:
+- **167 tests + 147 lessons** covering **Klasse 1 to Klasse 10** (Realschule NRW) — his full school career:
+  - **Klasse 1–3:** Zahlen bis 10/100, Plus & Minus mit Zehnerübergang, das kleine Einmaleins, Uhr lesen, Geld, Formen & Körper, Buchstaben/Silben, richtig schreiben
+  - **Sprachen in der Tiefe:** Englisch (27 Tests: bis Reported Speech, Modals, Relative Clauses, Writing), Französisch (6), **Spanisch (4, neu)**, **Russisch (5, neu — Kyrillisch, 6 Fälle, Aspekt)**
   - **Klasse 4:** Mathematik (16, incl. 3 full "Lernzielkontrollen"), Deutsch (12), Englisch (5), Sachunterricht (6)
   - **Klasse 5:** Mathematik, Deutsch, Englisch, Informatik, Biologie, Erdkunde
   - **Klasse 6:** Brüche, Dezimalzahlen, Winkel · Satzgefüge, Textsorten · Simple Past, Present Progressive · Zellen & Fotosynthese · Klimazonen · Physik-Grundlagen · **Französisch**, Antike
