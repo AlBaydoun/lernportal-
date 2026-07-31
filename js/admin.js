@@ -132,6 +132,7 @@ function applySync(){
   const raw = (document.getElementById('syncIn').value||'').trim();
   const msg = document.getElementById('syncMsg');
   try{
+    backupNow('before-sync');
     const o = JSON.parse(dec(raw));
     if(!o || !o.n || !o.d) throw new Error('bad');
     let id = o.n.toLowerCase().replace(/[^a-z0-9]/g,'') || ('u'+Date.now());
@@ -409,7 +410,28 @@ function adminSolutions(){
 
 /* ---- settings tab ---- */
 function adminSettings(){
-  return `<h3>${t('tab_settings')}</h3>
+  const list = readBackups();
+  const rescue = !!localStorage.getItem(LS_RESCUE);
+  const bRows = list.slice().reverse().map((b,i)=>{
+    const o = parseRoot(b.p) || {};
+    const st = statsOfRoot(o);
+    const d = new Date(b.t);
+    return `<div class="att-row">
+      <span>💾 <b>${d.toLocaleString('de-DE',{dateStyle:'short',timeStyle:'short'})}</b>
+        <small style="color:#aaa"> · ${st.users} 👤 · ${st.results} 📝 · ${esc(b.r||'')}</small></span>
+      <button class="mini-btn" onclick="restoreBackup(${list.length-1-i})">${t('restore')}</button></div>`;
+  }).join('');
+  return `<h3>🛡️ ${t('dataSafety')}</h3>
+  <p class="hint">${t('dataSafetyInfo')}</p>
+  ${SAVE_FAILED?`<p style="color:var(--red);font-weight:800">${t('saveFailed')}</p>`:
+    `<p style="color:var(--green);font-weight:800">✅ ${t('saveOk')}</p>`}
+  <h3 style="margin-top:16px">${t('backups')} (${list.length})</h3>
+  ${bRows || `<p class="hint">${t('noBackups')}</p>`}
+  <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:10px">
+    <button class="mini-btn" onclick="backupNow('manual');renderAdmin()">💾 ${t('backupNowBtn')}</button>
+    ${rescue?`<button class="mini-btn" style="background:var(--orange)" onclick="restoreRescue()">🚑 ${t('rescueFound')}</button>`:''}
+  </div>
+  <h3 style="margin-top:22px">${t('tab_settings')}</h3>
   <div class="adj-form">
     <input type="password" id="newPw" placeholder="${t('newPw')}" style="min-width:200px">
     <button class="mini-btn" onclick="changePw()">${t('changePw')}</button>
@@ -420,6 +442,28 @@ function adminSettings(){
     <label class="btn ghost" style="cursor:pointer">${t('importData')}<input type="file" accept=".json" style="display:none" onchange="importData(this)"></label>
     <button class="btn warn" onclick="resetAllData()">${t('resetAll')}</button>
   </div>`;
+}
+function restoreBackup(idx){
+  const list = readBackups();
+  const b = list[idx]; if(!b) return;
+  const o = parseRoot(b.p);
+  if(!o || !o.users){ alert('?'); return; }
+  const st = statsOfRoot(o);
+  if(!confirm(t('restoreConfirm')+`\n\n${new Date(b.t).toLocaleString('de-DE')} · ${st.users} 👤 · ${st.results} 📝`)) return;
+  backupNow('before-restore');
+  ROOT = o;
+  if(!ROOT.users[ROOT.activeUser]) ROOT.activeUser = Object.keys(ROOT.users)[0];
+  S = userData(ROOT.activeUser); save(); updateChip(); renderAdmin();
+}
+function restoreRescue(){
+  const raw = localStorage.getItem(LS_RESCUE);
+  const o = parseRoot(raw);
+  if(!o){ alert(t('rescueUnreadable')); return; }
+  backupNow('before-rescue');
+  ROOT = o;
+  if(!ROOT.users) { alert(t('rescueUnreadable')); return; }
+  if(!ROOT.users[ROOT.activeUser]) ROOT.activeUser = Object.keys(ROOT.users)[0];
+  S = userData(ROOT.activeUser); save(); updateChip(); renderAdmin();
 }
 function changePw(){
   const v = $('#newPw').value.trim();
@@ -438,6 +482,7 @@ function importData(inp){
   const f = inp.files[0]; if(!f) return;
   const rd = new FileReader();
   rd.onload = ()=>{ try{
+    backupNow('before-import');
     const d = JSON.parse(rd.result);
     if(d && d.users){ ROOT = d; }                       // new multi-user backup
     else if(d && d.results){ ROOT = defaultRoot(); ROOT.users.timur.data = d; }   // old backup
@@ -449,6 +494,7 @@ function importData(inp){
 }
 function resetAllData(){
   if(!confirm(t('resetConfirm'))) return;
+  backupNow('before-reset');            // reset is undoable via Datensicherung
   S.results=[]; S.attempts={}; S.extra={}; S.adj=[]; S.days={}; S.levels={}; S.lessonsSeen={};
   save(); renderAdmin(); updateChip();
 }

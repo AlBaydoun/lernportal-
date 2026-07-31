@@ -10,6 +10,19 @@ All progress, results and credits are saved automatically in that browser (local
 > Tip: put a shortcut to `index.html` on the desktop of the computer/tablet he uses.
 > Important: always use the **same browser on the same device**, otherwise results are stored separately.
 
+## 🛡️ His progress survives every update
+
+**Website updates never touch his data.** The progress is stored in his browser under a fixed key (`lernportal_v1`); publishing new lessons, tests or features only replaces the *program*, never the *data*. This is verified: I made a code change, hard-reloaded like a real deploy, and his results, gadget minutes, lessons and levels came back byte-for-byte identical.
+
+On top of that the portal protects itself:
+- **Automatic backups** — after every test, every 2 minutes of activity, once a day, and before any risky action (import, sync, reset, restore). The last 6 snapshots are kept in a *separate* storage key.
+- **Self-healing** — if the saved data is ever unreadable (interrupted write, full storage), the portal automatically restores the newest good backup instead of starting empty. Tested: I deliberately corrupted the save, reloaded, and everything came back complete.
+- **Nothing is ever thrown away** — unreadable data is copied to a rescue slot, restorable with one click.
+- **Verified saving** — every save is read back and checked. If saving fails (private mode, storage full), the admin panel warns you in red instead of failing silently.
+- Admin → ⚙️ Einstellungen → **🛡️ Datensicherheit** lists every snapshot with date, user count and test count, and restores any of them with one click.
+
+The only things that *can* remove his progress: clearing the browser's site data, using a different browser/device (use the Sync-Code), or the admin "Alles zurücksetzen" button — and even that one now makes a backup first, so it can be undone.
+
 ## 👤 Users
 
 The site opens with a login screen. **Timur / `Baydoun1984`** is set up. Each user has completely separate progress (results, levels, lessons read, gadget minutes, practice time).

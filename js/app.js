@@ -28,9 +28,64 @@ function defaultRoot(){
   return { v:2, lang:'de', adminPw:DEFAULT_ADMIN_HASH, activeUser:'timur',
     users:{ timur:{ name:'Timur', pw:TIMUR_HASH, created:new Date().toISOString().slice(0,10), data:blankProgress() } } };
 }
-let ROOT, S;
-try { ROOT = JSON.parse(dec(localStorage.getItem(LS_KEY))); } catch(e){ ROOT = null; }
-if(ROOT && !ROOT.v && ROOT.results){                    // migrate the old single-user save
+/* ================= DATA SAFETY =================
+   The progress lives in this browser under a fixed key. Updating the website
+   never touches it. These helpers make sure it also survives corrupt writes,
+   failed saves and future format changes. */
+const LS_BACKUP = 'lernportal_backups';   // rolling snapshots
+const LS_RESCUE = 'lernportal_rescue';    // raw copy of anything unreadable
+const MAX_BACKUPS = 6;
+
+function readBackups(){
+  try { return JSON.parse(localStorage.getItem(LS_BACKUP)) || []; } catch(e){ return []; }
+}
+function writeBackups(list){
+  try { localStorage.setItem(LS_BACKUP, JSON.stringify(list.slice(-MAX_BACKUPS))); }
+  catch(e){ try{ localStorage.setItem(LS_BACKUP, JSON.stringify(list.slice(-2))); }catch(e2){} }
+}
+function backupNow(reason){
+  if(typeof ROOT==='undefined' || !ROOT || !ROOT.users) return;
+  const list = readBackups();
+  const stamp = new Date().toISOString();
+  const payload = enc(JSON.stringify(ROOT));
+  if(list.length && list[list.length-1].p === payload) return;       // nothing changed
+  list.push({ t:stamp, r:reason||'auto', p:payload });
+  writeBackups(list);
+}
+function statsOfRoot(r){
+  try{
+    let res=0, users=0;
+    Object.values(r.users||{}).forEach(u=>{ users++; res += ((u.data||{}).results||[]).length; });
+    return {users, results:res};
+  }catch(e){ return {users:0, results:0}; }
+}
+function parseRoot(raw){
+  if(!raw) return null;
+  try{ const o = JSON.parse(dec(raw)); return (o && (o.users || o.results)) ? o : null; }
+  catch(e){ return null; }
+}
+function restoreFromBackups(){
+  const list = readBackups();
+  for(let i=list.length-1; i>=0; i--){
+    const o = parseRoot(list[i].p);
+    if(o && o.users && Object.keys(o.users).length) return o;
+  }
+  return null;
+}
+
+let ROOT, S, LOAD_NOTE = '';
+const RAW = localStorage.getItem(LS_KEY);
+ROOT = parseRoot(RAW);
+if(!ROOT && RAW){                                   // unreadable – never throw it away
+  try { localStorage.setItem(LS_RESCUE, RAW); } catch(e){}
+  ROOT = restoreFromBackups();
+  LOAD_NOTE = ROOT ? 'restored' : 'rescued';
+}
+if(!ROOT){                                          // nothing at all → try a backup first
+  ROOT = restoreFromBackups();
+  if(ROOT) LOAD_NOTE = 'restored';
+}
+if(ROOT && !ROOT.v && ROOT.results){                // migrate the old single-user save
   const old = ROOT;
   ROOT = defaultRoot();
   ROOT.lang = old.lang || 'de';
@@ -41,6 +96,10 @@ if(ROOT && !ROOT.v && ROOT.results){                    // migrate the old singl
 }
 if(!ROOT || !ROOT.users || !Object.keys(ROOT.users).length) ROOT = defaultRoot();
 if(!ROOT.users[ROOT.activeUser]) ROOT.activeUser = Object.keys(ROOT.users)[0];
+/* keep the Timur account alive even if a future format ever drops it */
+if(!Object.keys(ROOT.users).length) ROOT.users = defaultRoot().users;
+if(!ROOT.adminPw) ROOT.adminPw = DEFAULT_ADMIN_HASH;
+ROOT.v = 2;
 function userData(id){
   const u = ROOT.users[id];
   if(!u.data) u.data = blankProgress();
@@ -51,8 +110,35 @@ function userData(id){
   return d;
 }
 S = userData(ROOT.activeUser);
-function save(){ try{ localStorage.setItem(LS_KEY, enc(JSON.stringify(ROOT))); }catch(e){} }
+/* verified save: writes, reads back, and only then counts as done.
+   If the write fails or comes back unreadable, the last good backup stays. */
+let SAVE_FAILED = false, LAST_BACKUP = 0;
+function save(){
+  try{
+    const payload = enc(JSON.stringify(ROOT));
+    localStorage.setItem(LS_KEY, payload);
+    const check = localStorage.getItem(LS_KEY);
+    if(check !== payload || !parseRoot(check)) throw new Error('verify failed');
+    SAVE_FAILED = false;
+    if(Date.now()-LAST_BACKUP > 120000){          // keep a fresh snapshot every 2 min of activity
+      LAST_BACKUP = Date.now();
+      backupNow('auto');
+    }
+  }catch(e){
+    SAVE_FAILED = true;
+    try{ backupNow('save-failed'); }catch(e2){}
+    const w = document.getElementById('saveWarn');
+    if(w) w.style.display = '';
+  }
+}
 LANG = ROOT.lang || 'de';
+/* one automatic snapshot per day, plus one right now if none exist yet */
+(function initBackups(){
+  const list = readBackups();
+  const today = new Date().toISOString().slice(0,10);
+  if(!list.length || !list.some(b=>(b.t||'').slice(0,10)===today)) backupNow('daily');
+  if(LOAD_NOTE) console.warn('[Lernportal] data load:', LOAD_NOTE);
+})();
 
 /* ---------- login / user switching ---------- */
 let LOGGED_IN = false;
@@ -699,7 +785,7 @@ function finishTest(){
     details
   };
   if(SES.levelId && pct > (S.levels[SES.levelId]||0)) S.levels[SES.levelId] = pct;
-  S.results.push(res); save();
+  S.results.push(res); save(); backupNow('test');
   SES = null;
   VIEW = {name:'result', res};
   renderResult(res);
@@ -800,3 +886,4 @@ const userBtn = document.getElementById('userChip');
 if(userBtn) userBtn.addEventListener('click', ()=>logoutUser());
 applyLang();
 renderLogin();
+
