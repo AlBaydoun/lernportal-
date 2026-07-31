@@ -1,6 +1,6 @@
 /* ============ Lernportal core app ============ */
 const LS_KEY = 'lernportal_v1';
-const ALL_TESTS = [...TESTS_MATH, ...TESTS_GERMAN, ...TESTS_ENGLISH, ...TESTS_OTHER, ...TESTS_INFO];
+const ALL_TESTS = [...TESTS_MATH, ...TESTS_GERMAN, ...TESTS_ENGLISH, ...TESTS_OTHER, ...TESTS_INFO, ...LEVEL_TESTS];
 const SUBJECT_ORDER = ['math','german','english','info','sach','bio','geo'];
 const SUBJECT_ICON = {math:'🔢',german:'📖',english:'🇬🇧',info:'💻',sach:'🔬',bio:'🌿',geo:'🌍'};
 const MAX_ATTEMPTS = 2;
@@ -15,6 +15,8 @@ let S;
 try { S = JSON.parse(dec(localStorage.getItem(LS_KEY))); if(!S || !S.results) S = defaultState(); }
 catch(e){ S = defaultState(); }
 if(!S.days) S.days = {};
+if(!S.levels) S.levels = {};
+if(!S.mode) S.mode = 'map';
 function save(){ try{ localStorage.setItem(LS_KEY, enc(JSON.stringify(S))); }catch(e){} }
 LANG = S.lang || 'de';
 
@@ -86,17 +88,83 @@ function rerender(){
 function goHome(){ VIEW={name:'home', grade:VIEW.grade||4}; SES=null; renderHome(); }
 
 /* ---------- HOME ---------- */
+function setMode(m){ S.mode = m; save(); renderHome(); }
 function renderHome(){
   updateChip(); applyLang();
-  const grade = VIEW.grade;
+  const mode = S.mode || 'map';
   let html = `<div class="hero"><h1>${t('heroTitle')}</h1><p>${t('heroSub')}</p></div>
   <div class="grade-tabs">
+    <button class="gtab ${mode==='map'?'active':''}" onclick="setMode('map')">${t('mode_map')}</button>
+    <button class="gtab ${mode==='training'?'active':''}" onclick="setMode('training')">${t('mode_training')}</button>
+  </div>`;
+  html += (mode==='map') ? renderMap() : renderTraining();
+  $('#app').innerHTML = html;
+  if(mode==='map' && allLevelsDone() && !S.champShown){ S.champShown = true; save(); confettiBurst(); }
+  window.scrollTo(0,0);
+}
+
+/* ---------- adventure map ---------- */
+function levelBest(id){ return S.levels[id]||0; }
+function levelPassed(i){ return levelBest(LEVELS[i].id) >= LEVEL_PASS; }
+function levelState(i){
+  if(levelPassed(i)) return 'done';
+  return (i===0 || levelPassed(i-1)) ? 'current' : 'locked';
+}
+function allLevelsDone(){ return LEVELS.every((_,i)=>levelPassed(i)); }
+function renderMap(){
+  const done = LEVELS.filter((_,i)=>levelPassed(i)).length;
+  let html = `<div class="map-head">
+    <h2>${t('yourPath')}</h2>
+    <div class="pbar map-pbar"><div style="width:${done/LEVELS.length*100}%"></div></div>
+    <p class="map-progress">${done} / ${LEVELS.length} ${t('levelsDone')} · ${t('passInfo')}</p>
+    ${allLevelsDone()?`<div class="champ-banner">${t('championTitle')}<br><small>${t('championSub')}</small></div>`:''}
+  </div><div class="map-wrap">`;
+  const offsets = [0,-78,0,78];
+  let lastTier = null;
+  LEVELS.forEach((L,i)=>{
+    if(L.tier!==lastTier){ lastTier = L.tier; html += `<div class="tier-banner tb-${L.tier}">${t('tier_'+L.tier)}</div>`; }
+    const st = levelState(i), best = levelBest(L.id);
+    const inner = st==='done' ? '✓' : (L.final ? '👑' : (i+1));
+    html += `<div class="lvl-row" style="transform:translateX(${offsets[i%4]}px)">
+      <div class="lvl-cell">
+        <button class="lvl-node ${st} ${L.final?'final':''}" onclick="startLevel(${i})">
+          ${st==='locked' ? '🔒' : inner}
+        </button>
+        <div class="lvl-label">${t('levelWord')} ${i+1}${st==='done'?`<br><span class="lvl-stars">${starsFor(best)}</span>`:''}</div>
+      </div></div>`;
+  });
+  return html + '</div>';
+}
+function startLevel(i){
+  const L = LEVELS[i];
+  if(levelState(i)==='locked'){
+    showModal(`<button class="close-x" onclick="closeModal()">✕</button>
+      <span class="locked-emoji">🔒</span><h3 style="text-align:center">${t('levelWord')} ${i+1}</h3>
+      <p style="text-align:center;font-weight:700;line-height:1.6">${t('lockedLevel')}</p>
+      <div style="text-align:center;margin-top:16px"><button class="btn primary" onclick="closeModal()">${t('ok')}</button></div>`);
+    return;
+  }
+  const avail = L.pool.filter(id=> testById(id) && attemptsLeft(id)>0);
+  if(!avail.length){
+    showModal(`<button class="close-x" onclick="closeModal()">✕</button>
+      <span class="locked-emoji">🔒</span><h3 style="text-align:center">${t('lockedTitle')}</h3>
+      <p style="text-align:center;font-weight:700;line-height:1.6">${t('noAttempts')}</p>
+      <div style="text-align:center;margin-top:16px"><button class="btn primary" onclick="closeModal()">${t('ok')}</button></div>`);
+    return;
+  }
+  startTest(pick(avail), L.id);
+}
+
+/* ---------- training mode (subject browser) ---------- */
+function renderTraining(){
+  const grade = VIEW.grade || 4;
+  let html = `<div class="grade-tabs sub">
     <button class="gtab ${grade===4?'active':''}" onclick="VIEW.grade=4;renderHome()">🎒 ${t('grade4')}</button>
     <button class="gtab ${grade===5?'active':''}" onclick="VIEW.grade=5;renderHome()">🚀 ${t('grade5')}</button>
     <button class="gtab ${grade===0?'active':''}" onclick="VIEW.grade=0;renderHome()">✨ ${t('allGrades')}</button>
   </div>`;
   for(const subj of SUBJECT_ORDER){
-    const tests = ALL_TESTS.filter(x=> x.subject===subj && (grade===0 || x.grade===grade));
+    const tests = ALL_TESTS.filter(x=> x.subject===subj && !x.levelOnly && (grade===0 || x.grade===grade));
     if(!tests.length) continue;
     html += `<div class="subject-block">
       <div class="subject-head"><span class="s-ico">${SUBJECT_ICON[subj]}</span><h2>${t('subj_'+subj)}</h2>
@@ -119,12 +187,11 @@ function renderHome(){
     }
     html += `</div></div>`;
   }
-  $('#app').innerHTML = html;
-  window.scrollTo(0,0);
+  return html;
 }
 
 /* ---------- TEST ---------- */
-function startTest(id){
+function startTest(id, levelId){
   const test = testById(id);
   if(!test) return;
   if(attemptsLeft(id)<=0){
@@ -144,7 +211,7 @@ function startTest(id){
   });
   S.attempts[id] = attemptsUsed(id)+1; save();
   SES = { test, qs, idx:0, answers:new Array(qs.length).fill(null), checked:new Array(qs.length).fill(null),
-          helpUsed:0, started:Date.now(), showTr:false };
+          helpUsed:0, started:Date.now(), showTr:false, levelId: levelId||null };
   VIEW = {name:'test'};
   renderQuestion();
 }
@@ -382,8 +449,10 @@ function finishTest(){
     durationSec: Math.floor((Date.now()-SES.started)/1000),
     helpUsed: SES.helpUsed,
     attempt: attemptsUsed(SES.test.id),
+    level: SES.levelId,
     details
   };
+  if(SES.levelId && pct > (S.levels[SES.levelId]||0)) S.levels[SES.levelId] = pct;
   S.results.push(res); save();
   SES = null;
   VIEW = {name:'result', res};
@@ -402,26 +471,42 @@ function renderResult(res){
     const cls = d.pts===d.max?'ok': d.pts>0?'half':'bad';
     return `<div class="qdot ${cls}" title="${t('q_short')}${i+1}">${i+1}</div>`;
   }).join('');
+  const lvlBanner = res.level
+    ? (res.pct>=LEVEL_PASS
+        ? `<div class="fb-banner ok" style="display:inline-block">${t('levelDone')}</div>`
+        : `<div class="fb-banner half" style="display:inline-block">${t('levelFail')}</div>`)
+    : '';
   $('#app').innerHTML = `<div class="result-wrap">
     <h1 style="color:#fff;text-shadow:0 3px 12px rgba(76,60,180,.45)">${t('resultTitle')}</h1>
     <div class="score-circle" style="background:${color}"><b>${res.pct}%</b><span>${res.pts} / ${res.max} ${t('points')}</span></div>
     <div class="big-stars">${starsFor(res.pct)}</div>
+    ${lvlBanner}
     <div><span class="credit-earn"><span class="coin">🪙</span> +${credits} ${t('min')} ${t('earned')}</span></div>
     <p class="res-note">${msg}</p>
     <div class="qdots">${dots}</div>
     <p class="res-note" style="font-size:.8rem">⏱ ${fmtTime(res.durationSec)} · 💡 ${res.helpUsed}× ${t('helpUsed')}</p>
     <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-top:14px">
-      <button class="btn ghost" onclick="goHome()">${t('home')}</button>
-      ${left>0 ? `<button class="btn primary" onclick="startTest('${res.testId}')">${t('retry')} (${left})</button>`
-               : `<span class="att-badge locked" style="align-self:center">🔒 ${t('noAttempts')}</span>`}
+      <button class="btn ghost" onclick="goHome()">${res.level ? t('backToMap') : t('home')}</button>
+      ${left>0 && !(res.level && res.pct>=LEVEL_PASS)
+        ? `<button class="btn primary" onclick="startTest('${res.testId}'${res.level?`,'${res.level}'`:''})">${t('retry')} (${left})</button>`
+        : ''}
+      ${left<=0 && res.pct<LEVEL_PASS ? `<span class="att-badge locked" style="align-self:center">🔒 ${t('noAttempts')}</span>`:''}
     </div>
   </div>`;
   window.scrollTo(0,0);
 }
 
 /* ---------- modal ---------- */
-function showModal(html){ $('#modalBox').innerHTML=html; $('#modalWrap').classList.remove('hidden'); }
-function closeModal(){ $('#modalWrap').classList.add('hidden'); }
+function showModal(html, cls){
+  const box = $('#modalBox');
+  box.className = 'modal' + (cls ? ' '+cls : '');
+  box.innerHTML = html;
+  $('#modalWrap').classList.remove('hidden');
+}
+function closeModal(){
+  $('#modalWrap').classList.add('hidden');
+  $('#modalBox').innerHTML = '';   // stops any playing video
+}
 $('#modalWrap').addEventListener('click', e=>{ if(e.target.id==='modalWrap') closeModal(); });
 
 /* ---------- confetti ---------- */

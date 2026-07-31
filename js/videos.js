@@ -75,12 +75,25 @@ infoScratch:{
       ['Scratch #01 – Einführung für Anfänger','https://www.youtube.com/watch?v=O-CNjHsYE20']],
   ru:[['Scratch. Урок 1.2 – Первый скрипт (для детей)','https://www.youtube.com/watch?v=4z3lJnDlHoM']]},
 };
+function ytIdOf(url){ const m = url.match(/[?&]v=([\w-]+)/); return m ? m[1] : null; }
 function videoHTML(topic){
   const v = VIDEOS[topic]; if(!v) return '';
   const de = v.de||[], ru = v.ru||[];
   if(!de.length && !ru.length) return '';
   let h = `<div class="video-box"><div class="video-head">🎬 ${t('videos')}</div>`;
-  de.forEach(x=>{ h += `<a class="vid-link" href="${x[1]}" target="_blank" rel="noopener">🇩🇪 ▶ ${esc(x[0])}</a>`; });
-  ru.forEach(x=>{ h += `<a class="vid-link" href="${x[1]}" target="_blank" rel="noopener">🇷🇺 ▶ ${esc(x[0])}</a>`; });
+  de.forEach((x,i)=>{ h += `<button class="vid-link" onclick="playVideo('${topic}','de',${i})">🇩🇪 ▶ ${esc(x[0])}</button>`; });
+  ru.forEach((x,i)=>{ h += `<button class="vid-link" onclick="playVideo('${topic}','ru',${i})">🇷🇺 ▶ ${esc(x[0])}</button>`; });
   return h + '</div>';
+}
+function playVideo(topic, lang, i){
+  const entry = (VIDEOS[topic]||{})[lang]?.[i]; if(!entry) return;
+  const [title, url] = entry;
+  const id = ytIdOf(url);
+  if(!id){ window.open(url, '_blank'); return; }
+  showModal(`<button class="close-x" onclick="closeModal()">✕</button>
+    <h3>🎬 ${esc(title)}</h3>
+    <div class="player-16x9"><iframe src="https://www.youtube-nocookie.com/embed/${id}?autoplay=1&rel=0"
+      title="${esc(title)}" allow="autoplay; encrypted-media; picture-in-picture" allowfullscreen></iframe></div>
+    <p class="hint" style="margin-top:10px">${t('videoHint')}</p>
+    <a class="vid-link" href="${url}" target="_blank" rel="noopener">▶ ${t('watchYt')}</a>`, 'video');
 }

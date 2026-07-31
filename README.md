@@ -10,6 +10,10 @@ All progress, results and credits are saved automatically in that browser (local
 > Tip: put a shortcut to `index.html` on the desktop of the computer/tablet he uses.
 > Important: always use the **same browser on the same device**, otherwise results are stored separately.
 
+## 🗺️ Adventure mode (default)
+
+The site now opens as a game: a winding level map with **31 levels** across six tiers — ⭐ Starter → 🥉 Kämpfer → 🥈 Könner → 🥇 Profi → 💎 Meister → 👑 Champion. Each level randomly draws one test from a themed pool (all 79 tests are woven into the path, easy ones first, Klasse-5 material at the top). A level is passed with **≥ 60 %**, which unlocks the next node; stars show his best score. The final crown level is a big all-subject exam. Beating all 31 levels triggers the Champion celebration. "📚 Freies Training" switches back to the classic subject browser. Videos in the explanations now **play directly in a pop-up player** inside the site (with a YouTube fallback link).
+
 ## What's inside
 
 - **79 tests** organised by grade and subject:
