@@ -75,6 +75,43 @@ infoScratch:{
       ['Scratch #01 – Einführung für Anfänger','https://www.youtube.com/watch?v=O-CNjHsYE20']],
   ru:[['Scratch. Урок 1.2 – Первый скрипт (для детей)','https://www.youtube.com/watch?v=4z3lJnDlHoM']]},
 };
+/* ---- grades 6–10 ---- */
+Object.assign(VIDEOS, {
+frac:{ de:[['Brüche erweitern & kürzen – Lehrerschmidt','https://www.youtube.com/watch?v=GpTK8NbM_m0'],
+           ['Brüche kürzen – Lehrerschmidt','https://www.youtube.com/watch?v=PCwQxk1nM7k']]},
+fracOps:{ de:[['Brüche addieren – gleicher Nenner – Lehrerschmidt','https://www.youtube.com/watch?v=1CixUUzrk4Q'],
+              ['Brüche addieren – unterschiedliche Nenner – Lehrerschmidt','https://www.youtube.com/watch?v=ZJapyjjAW8Q'],
+              ['Brüche multiplizieren (mit Kürzen) – Lehrerschmidt','https://www.youtube.com/watch?v=LA3VrJBGyNE']]},
+negNum:{ de:[['Natürliche und negative Zahlen – Lehrerschmidt','https://www.youtube.com/watch?v=44ANi3KvL7I'],
+             ['Negative Zahlen am Zahlenstrahl – Lehrerschmidt','https://www.youtube.com/watch?v=zRWwa7XZJLo'],
+             ['Rationale Zahlen subtrahieren – Lehrerschmidt','https://www.youtube.com/watch?v=6OAbTKruL84'],
+             ['Rationale Zahlen dividieren – Lehrerschmidt','https://www.youtube.com/watch?v=9t6niouU4BQ']]},
+percent:{ de:[['Prozentrechnung – das Formeldreieck – Lehrerschmidt','https://www.youtube.com/watch?v=amSw62SFKDI'],
+              ['Prozentwert berechnen – Lehrerschmidt','https://www.youtube.com/watch?v=STRLNoknUl4'],
+              ['Prozentsatz berechnen – Lehrerschmidt','https://www.youtube.com/watch?v=YdBcJa8-81s'],
+              ['Grundwert berechnen – Lehrerschmidt','https://www.youtube.com/watch?v=MoWWJPpMCBA']]},
+dreisatz:{ de:[['Dreisatz einfach erklärt – Lehrerschmidt','https://www.youtube.com/watch?v=ELKsWSoQUjo'],
+               ['Dreisatz – Grundwert berechnen – Lehrerschmidt','https://www.youtube.com/watch?v=K04wnXsmzOE'],
+               ['Einfacher Dreisatz – Lehrerschmidt','https://www.youtube.com/watch?v=IXCWLXdv6YQ']]},
+zins:{ de:[['Dreisatz und Zins – Wiederholung 9. Klasse – Lehrerschmidt','https://www.youtube.com/watch?v=JR2HlPuir6s'],
+           ['Prozentfaktor – schnelles Prozentrechnen – Lehrerschmidt','https://www.youtube.com/watch?v=NFeiNmg3J98']]},
+equation:{ de:[['x ausrechnen – einfache Gleichungen lösen – Lehrerschmidt','https://www.youtube.com/watch?v=isudBsbEAhQ'],
+               ['Äquivalenzumformung – Lehrerschmidt','https://www.youtube.com/watch?v=G5XxS2OFsJU']]},
+lgs:{ de:[['Gleichsetzungsverfahren – lineare Gleichungssysteme – Lehrerschmidt','https://www.youtube.com/watch?v=JemB5gL2aC8']]},
+pythagoras:{ de:[['Satz des Pythagoras – einfache Einführung – Lehrerschmidt','https://www.youtube.com/watch?v=akgYT4Ol3CE'],
+                 ['Hypotenuse berechnen – Lehrerschmidt','https://www.youtube.com/watch?v=2SmXe2BkCgU'],
+                 ['Kathete berechnen – Lehrerschmidt','https://www.youtube.com/watch?v=66LCWQlzM_g'],
+                 ['Das Dreieck richtig beschriften – Lehrerschmidt','https://www.youtube.com/watch?v=KKRIIWx6vFg']]},
+aktivPassiv:{ de:[['Aktiv und Passiv – alle Zeitformen (Klasse 7/8)','https://www.youtube.com/watch?v=AzLPMCaQokI'],
+                  ['Aktiv und Passiv einfach erklärt','https://www.youtube.com/watch?v=_fIR2kirOLg']]},
+konjunktiv:{ de:[['Konjunktiv einfach erklärt – musstewissen Deutsch','https://www.youtube.com/watch?v=N_faVcrB5zw']]},
+engPast:{ de:[['Das simple past – einfach erklärt','https://www.youtube.com/watch?v=BdZAjRlt8kI'],
+              ['Simple Past – Bildung und Übungen','https://www.youtube.com/watch?v=Jdn5Aps8WxQ'],
+              ['simple past: Das musst du wissen! – Duden Learnattack','https://www.youtube.com/watch?v=Ok85P4jTKW4']]},
+engPerfect:{ de:[['Present Perfect einfach erklärt (auf Deutsch)','https://www.youtube.com/watch?v=ecMsE-mq9Q8'],
+                 ['Present Perfect – Bildung und Übungen','https://www.youtube.com/watch?v=e2kqFl3FAbA'],
+                 ['Simple Past oder Present Perfect? – einfach erklärt','https://www.youtube.com/watch?v=BHLeWyrkGk8']]},
+});
 function ytIdOf(url){ const m = url.match(/[?&]v=([\w-]+)/); return m ? m[1] : null; }
 function videoHTML(topic){
   const v = VIDEOS[topic]; if(!v) return '';

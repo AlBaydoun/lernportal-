@@ -229,6 +229,7 @@ select.sel-test{font-size:1rem;font-weight:700;padding:10px;border-radius:12px;b
 .tier-banner{position:relative;z-index:1;text-align:center;margin:26px auto 12px;font-family:'Fredoka';font-weight:700;
   background:rgba(255,255,255,.9);border-radius:999px;padding:8px 26px;width:fit-content;box-shadow:var(--shadow);font-size:1.05rem}
 .tb-starter{color:#0984e3}.tb-bronze{color:#b3672b}.tb-silver{color:#7a7a8c}.tb-gold{color:#c29b00}.tb-master{color:#7c3aed}.tb-champ{color:#c0392b}
+.tb-k6{color:#00a8a8}.tb-k7{color:#e67e22}.tb-k8{color:#d63031}.tb-k9{color:#6c5ce7}.tb-k10{color:#2d3436;background:linear-gradient(135deg,#fed330,#f7b731)}
 .lvl-row{position:relative;z-index:1;display:flex;justify-content:center;margin:16px 0;transition:.3s}
 .lvl-cell{text-align:center}
 .lvl-node{width:76px;height:76px;border-radius:50%;border:5px solid #fff;font-family:'Fredoka';font-size:1.5rem;font-weight:700;

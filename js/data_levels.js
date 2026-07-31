@@ -91,9 +91,37 @@ const LEVELS = [
   {id:'L26', tier:'master', pool:['e5-simple','e5-questions','e5-can','e5-time']},
   {id:'L27', tier:'master', pool:['g5-welt','g5-deutschland','g5-karte','g5-europa']},
   {id:'L28', tier:'master', pool:['d5-lesen','d5-lesen2','d5-mix','e5-reading']},
-  // 👑 Champion
+  // 👑 Champion (Klasse 5 abgeschlossen)
   {id:'L29', tier:'champ', pool:['m5-ka1','m5-ka2','m5-word']},
   {id:'L30', tier:'champ', pool:['lv-champ-1']},
-  {id:'L31', tier:'champ', pool:['lv-champ-final'], final:true},
+  {id:'L31', tier:'champ', pool:['lv-champ-final']},
+  // 🌟 Klasse 6
+  {id:'L32', tier:'k6', pool:['m6-frac1','m6-dec']},
+  {id:'L33', tier:'k6', pool:['d6-satz','d6-text']},
+  {id:'L34', tier:'k6', pool:['e6-past','e6-prog']},
+  {id:'L35', tier:'k6', pool:['m6-frac2','m6-geo']},
+  {id:'L36', tier:'k6', pool:['b6-zelle','g6-klima','ph6-basics','fr6-start','ge6-antike']},
+  {id:'L37', tier:'k6', pool:['m6-mix','e6-irreg']},
+  // ⚡ Klasse 7
+  {id:'L38', tier:'k7', pool:['m7-neg','m7-percent']},
+  {id:'L39', tier:'k7', pool:['d7-aktiv','d7-konj']},
+  {id:'L40', tier:'k7', pool:['e7-perfect','e7-comp']},
+  {id:'L41', tier:'k7', pool:['m7-dreisatz','m7-term']},
+  {id:'L42', tier:'k7', pool:['ph7-optik','ch7-stoffe','ge7-mittelalter','po7-demo','fr7-verbs','i7-office']},
+  // 🔥 Klasse 8
+  {id:'L43', tier:'k8', pool:['m8-func','m8-geo']},
+  {id:'L44', tier:'k8', pool:['d8-lit','e8-cond']},
+  {id:'L45', tier:'k8', pool:['m8-stat','ph8-strom']},
+  {id:'L46', tier:'k8', pool:['ch8-atom','ge8-neuzeit','b8-oeko','g8-stadt']},
+  // 💎 Klasse 9
+  {id:'L47', tier:'k9', pool:['m9-pyth','m9-pot']},
+  {id:'L48', tier:'k9', pool:['d9-eroerterung','e9-passive']},
+  {id:'L49', tier:'k9', pool:['m9-zins','ph9-mech']},
+  {id:'L50', tier:'k9', pool:['ch9-saeuren','ge9-20jh','po9-wirt','b9-koerper','i9-code']},
+  // 🎓 Klasse 10 – Abschluss
+  {id:'L51', tier:'k10', pool:['m10-quad','m10-trig']},
+  {id:'L52', tier:'k10', pool:['d10-final','e10-final']},
+  {id:'L53', tier:'k10', pool:['ph10-final','m10-final']},
+  {id:'L54', tier:'k10', pool:['lv-champ-final'], final:true},
 ];
 const LEVEL_PASS = 60;

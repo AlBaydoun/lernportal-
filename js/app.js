@@ -1,8 +1,11 @@
 /* ============ Lernportal core app ============ */
 const LS_KEY = 'lernportal_v1';
-const ALL_TESTS = [...TESTS_MATH, ...TESTS_GERMAN, ...TESTS_ENGLISH, ...TESTS_OTHER, ...TESTS_INFO, ...LEVEL_TESTS];
-const SUBJECT_ORDER = ['math','german','english','info','sach','bio','geo'];
-const SUBJECT_ICON = {math:'🔢',german:'📖',english:'🇬🇧',info:'💻',sach:'🔬',bio:'🌿',geo:'🌍'};
+const ALL_TESTS = [...TESTS_MATH, ...TESTS_GERMAN, ...TESTS_ENGLISH, ...TESTS_OTHER, ...TESTS_INFO,
+                   ...TESTS_CORE_HIGH, ...TESTS_SUBJ_HIGH, ...LEVEL_TESTS];
+const SUBJECT_ORDER = ['math','german','english','franz','info','sach','bio','physik','chemie','geo','geschichte','politik'];
+const SUBJECT_ICON = {math:'🔢',german:'📖',english:'🇬🇧',franz:'🇫🇷',info:'💻',sach:'🔬',bio:'🌿',
+                      physik:'🔭',chemie:'🧪',geo:'🌍',geschichte:'🏛️',politik:'🗳️'};
+const GRADES = [4,5,6,7,8,9,10];
 const MAX_ATTEMPTS = 2;
 
 /* ---------- state ---------- */
@@ -16,7 +19,7 @@ try { S = JSON.parse(dec(localStorage.getItem(LS_KEY))); if(!S || !S.results) S 
 catch(e){ S = defaultState(); }
 if(!S.days) S.days = {};
 if(!S.levels) S.levels = {};
-if(!S.mode) S.mode = 'map';
+if(!S.mode) S.mode = 'training';
 function save(){ try{ localStorage.setItem(LS_KEY, enc(JSON.stringify(S))); }catch(e){} }
 LANG = S.lang || 'de';
 
@@ -91,11 +94,11 @@ function goHome(){ VIEW={name:'home', grade:VIEW.grade||4}; SES=null; renderHome
 function setMode(m){ S.mode = m; save(); renderHome(); }
 function renderHome(){
   updateChip(); applyLang();
-  const mode = S.mode || 'map';
+  const mode = S.mode || 'training';
   let html = `<div class="hero"><h1>${t('heroTitle')}</h1><p>${t('heroSub')}</p></div>
   <div class="grade-tabs">
-    <button class="gtab ${mode==='map'?'active':''}" onclick="setMode('map')">${t('mode_map')}</button>
     <button class="gtab ${mode==='training'?'active':''}" onclick="setMode('training')">${t('mode_training')}</button>
+    <button class="gtab ${mode==='map'?'active':''}" onclick="setMode('map')">${t('mode_map')}</button>
   </div>`;
   html += (mode==='map') ? renderMap() : renderTraining();
   $('#app').innerHTML = html;
@@ -157,12 +160,11 @@ function startLevel(i){
 
 /* ---------- training mode (subject browser) ---------- */
 function renderTraining(){
-  const grade = VIEW.grade || 4;
-  let html = `<div class="grade-tabs sub">
-    <button class="gtab ${grade===4?'active':''}" onclick="VIEW.grade=4;renderHome()">🎒 ${t('grade4')}</button>
-    <button class="gtab ${grade===5?'active':''}" onclick="VIEW.grade=5;renderHome()">🚀 ${t('grade5')}</button>
-    <button class="gtab ${grade===0?'active':''}" onclick="VIEW.grade=0;renderHome()">✨ ${t('allGrades')}</button>
-  </div>`;
+  const grade = VIEW.grade===undefined ? 4 : VIEW.grade;
+  const gicon = {4:'🎒',5:'🚀',6:'🌟',7:'⚡',8:'🔥',9:'💎',10:'🎓'};
+  let html = `<div class="grade-tabs sub">` +
+    GRADES.map(g=>`<button class="gtab ${grade===g?'active':''}" onclick="VIEW.grade=${g};renderHome()">${gicon[g]} ${t('gradeShort')} ${g}</button>`).join('') +
+    `<button class="gtab ${grade===0?'active':''}" onclick="VIEW.grade=0;renderHome()">✨ ${t('allGrades')}</button></div>`;
   for(const subj of SUBJECT_ORDER){
     const tests = ALL_TESTS.filter(x=> x.subject===subj && !x.levelOnly && (grade===0 || x.grade===grade));
     if(!tests.length) continue;

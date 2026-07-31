@@ -10,15 +10,23 @@ All progress, results and credits are saved automatically in that browser (local
 > Tip: put a shortcut to `index.html` on the desktop of the computer/tablet he uses.
 > Important: always use the **same browser on the same device**, otherwise results are stored separately.
 
-## 🗺️ Adventure mode (default)
+## Two modes
 
-The site now opens as a game: a winding level map with **31 levels** across six tiers — ⭐ Starter → 🥉 Kämpfer → 🥈 Könner → 🥇 Profi → 💎 Meister → 👑 Champion. Each level randomly draws one test from a themed pool (all 79 tests are woven into the path, easy ones first, Klasse-5 material at the top). A level is passed with **≥ 60 %**, which unlocks the next node; stars show his best score. The final crown level is a big all-subject exam. Beating all 31 levels triggers the Champion celebration. "📚 Freies Training" switches back to the classic subject browser. Videos in the explanations now **play directly in a pop-up player** inside the site (with a YouTube fallback link).
+**📚 Freies Training (start page)** — browse by grade (4 → 10) and subject, pick any test directly.
+
+**🗺️ Abenteuer** — a game map with **54 levels** from ⭐ Starter through 👑 Champion (Kl. 5) and on through 🌟 Klasse 6, ⚡ 7, 🔥 8, 💎 9 up to 🎓 Klasse 10 – Abschluss. Each level randomly draws one test from a themed pool (**all 139 tests** are woven into the path). Pass with **≥ 60 %** to unlock the next node; stars show his best score. Videos **play directly in a pop-up player** inside the site.
 
 ## What's inside
 
-- **79 tests** organised by grade and subject:
-  - **Klasse 4:** Mathematik (16 tests, incl. 3 full "Lernzielkontrollen" with the 7-task structure), Deutsch (12), Englisch (5), Sachunterricht (6)
-  - **Klasse 5 (Realschule NRW):** Mathematik (10), Deutsch (9), Englisch (8), **Informatik (4)**, Biologie (5), Erdkunde (4)
+- **139 tests** covering **Klasse 4 to Klasse 10** (Realschule NRW) — his full school career:
+  - **Klasse 4:** Mathematik (16, incl. 3 full "Lernzielkontrollen"), Deutsch (12), Englisch (5), Sachunterricht (6)
+  - **Klasse 5:** Mathematik, Deutsch, Englisch, Informatik, Biologie, Erdkunde
+  - **Klasse 6:** Brüche, Dezimalzahlen, Winkel · Satzgefüge, Textsorten · Simple Past, Present Progressive · Zellen & Fotosynthese · Klimazonen · Physik-Grundlagen · **Französisch**, Antike
+  - **Klasse 7:** Negative Zahlen, Prozent, Dreisatz, Terme · Aktiv/Passiv, Konjunktiv · Present Perfect, Steigerung · Optik · Stoffe & Trennverfahren · Mittelalter · Demokratie · Tabellen/Präsentationen
+  - **Klasse 8:** Lineare Funktionen, Körper, Statistik · Literatur & Stilmittel · If-Sätze · Elektrizität · Atome · Neuzeit · Ökologie · Stadt & Wirtschaft
+  - **Klasse 9:** Pythagoras, Potenzen, Zinsen · Erörterung · Passive Voice · Mechanik · Säuren & Laugen · 20. Jahrhundert · Genetik · Python
+  - **Klasse 10:** Quadratische Gleichungen, Trigonometrie + **Abschlussprüfungen** in Mathe, Deutsch, Englisch und Physik
+  - Subjects: Mathematik, Deutsch, Englisch, Französisch, Informatik, Sachunterricht, Biologie, Physik, Chemie, Erdkunde, Geschichte, Politik/Wirtschaft
 - **Instant feedback:** after each task he presses "Prüfen" and immediately sees ✔ right / ✘ wrong (but never the solution — that stays admin-only).
 - **📚 Erklärung & 🎬 button on every test card:** full explanation of all topics in the test (DE/RU/EN) plus hand-verified YouTube videos in German and Russian that explain exactly that lesson (Lehrerschmidt, Инфоурок & co.). Topics without an exact matching video show the written explanation only — no generic links.
 - **⏱ Daily practice timer:** the blue chip shows how many minutes he practised **today** (counts only while he is actively using the site; resets automatically at midnight). The admin panel's **📅 Tagebuch** tab keeps the full history: per day it shows practice time, every test taken with score/attempt/help usage, plus an auto-generated conclusion — his wins (≥80 %) and the exact topics where he lost the most points ("noch üben").
