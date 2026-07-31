@@ -12,17 +12,99 @@ const MAX_ATTEMPTS = 2;
 /* ---------- state ---------- */
 function enc(s){ return btoa(unescape(encodeURIComponent(s))); }
 function dec(s){ return decodeURIComponent(escape(atob(s))); }
-function defaultState(){
-  return { lang:'de', results:[], attempts:{}, extra:{}, adminPw:enc('lise2026'), adj:[], days:{} };
+/* one-way hash so no password is ever stored (or shipped) in plain text */
+function pwHash(s){
+  let x=5381; for(let i=0;i<s.length;i++) x=((x<<5)+x+s.charCodeAt(i))>>>0;
+  let y=52711; for(let i=s.length-1;i>=0;i--) y=((y<<5)+y+s.charCodeAt(i)*7)>>>0;
+  return x.toString(36)+'-'+y.toString(36);
 }
-let S;
-try { S = JSON.parse(dec(localStorage.getItem(LS_KEY))); if(!S || !S.results) S = defaultState(); }
-catch(e){ S = defaultState(); }
-if(!S.days) S.days = {};
-if(!S.levels) S.levels = {};
-if(!S.mode) S.mode = 'training';
-function save(){ try{ localStorage.setItem(LS_KEY, enc(JSON.stringify(S))); }catch(e){} }
-LANG = S.lang || 'de';
+const DEFAULT_ADMIN_HASH = '1l1tjj0-15t02w';   // the admin password you already use
+const TIMUR_HASH        = '1adovjh-d2nwan';   // Timur's password
+
+function blankProgress(){
+  return { results:[], attempts:{}, extra:{}, adj:[], days:{}, levels:{}, lessonsSeen:{}, mode:'training' };
+}
+function defaultRoot(){
+  return { v:2, lang:'de', adminPw:DEFAULT_ADMIN_HASH, activeUser:'timur',
+    users:{ timur:{ name:'Timur', pw:TIMUR_HASH, created:new Date().toISOString().slice(0,10), data:blankProgress() } } };
+}
+let ROOT, S;
+try { ROOT = JSON.parse(dec(localStorage.getItem(LS_KEY))); } catch(e){ ROOT = null; }
+if(ROOT && !ROOT.v && ROOT.results){                    // migrate the old single-user save
+  const old = ROOT;
+  ROOT = defaultRoot();
+  ROOT.lang = old.lang || 'de';
+  ROOT.users.timur.data = {
+    results:old.results||[], attempts:old.attempts||{}, extra:old.extra||{}, adj:old.adj||[],
+    days:old.days||{}, levels:old.levels||{}, lessonsSeen:old.lessonsSeen||{}, mode:old.mode||'training'
+  };
+}
+if(!ROOT || !ROOT.users || !Object.keys(ROOT.users).length) ROOT = defaultRoot();
+if(!ROOT.users[ROOT.activeUser]) ROOT.activeUser = Object.keys(ROOT.users)[0];
+function userData(id){
+  const u = ROOT.users[id];
+  if(!u.data) u.data = blankProgress();
+  const d = u.data;
+  ['results','adj'].forEach(k=>{ if(!Array.isArray(d[k])) d[k]=[]; });
+  ['attempts','extra','days','levels','lessonsSeen'].forEach(k=>{ if(!d[k]) d[k]={}; });
+  if(!d.mode) d.mode='training';
+  return d;
+}
+S = userData(ROOT.activeUser);
+function save(){ try{ localStorage.setItem(LS_KEY, enc(JSON.stringify(ROOT))); }catch(e){} }
+LANG = ROOT.lang || 'de';
+
+/* ---------- login / user switching ---------- */
+let LOGGED_IN = false;
+function currentUserName(){ return (ROOT.users[ROOT.activeUser]||{}).name || '?'; }
+function loginAs(id){
+  ROOT.activeUser = id;
+  S = userData(id);
+  LOGGED_IN = true;
+  save();
+  VIEW = {name:'home', grade:VIEW.grade||4};
+  document.getElementById('topbar').style.display = '';
+  renderHome();
+}
+function logoutUser(){
+  LOGGED_IN = false;
+  SES = null;
+  renderLogin();
+}
+function renderLogin(err){
+  document.getElementById('topbar').style.display = 'none';
+  const users = Object.entries(ROOT.users);
+  $('#app').innerHTML = `<div class="login-wrap">
+    <div class="login-card">
+      <div class="login-logo">🎓</div>
+      <h1>${t('appTitle')}</h1>
+      <p class="login-sub">${t('loginSub')}</p>
+      <div class="user-pick">
+        ${users.map(([id,u])=>`<button class="user-btn ${id===ROOT.activeUser?'sel':''}" onclick="pickUser('${id}')">
+          <span class="ub-ava">${esc((u.name||'?')[0].toUpperCase())}</span><span>${esc(u.name)}</span></button>`).join('')}
+      </div>
+      <input type="password" id="loginPw" class="pw-inp" placeholder="${t('password')}" onkeydown="if(event.key==='Enter')doLogin()">
+      ${err?`<div class="login-err">${t('wrongPw')}</div>`:''}
+      <button class="btn primary" style="width:100%" onclick="doLogin()">${t('login')}</button>
+      <button class="back-link" style="margin-top:14px" onclick="adminGate()">⚙️ ${t('adminLogin')}</button>
+    </div></div>`;
+  const lang = document.querySelectorAll('.lbtn');
+  setTimeout(()=>{ const i=$('#loginPw'); if(i) i.focus(); },80);
+}
+let PICKED_USER = null;
+function pickUser(id){
+  PICKED_USER = id;
+  document.querySelectorAll('.user-btn').forEach(b=>b.classList.remove('sel'));
+  event.target.closest('.user-btn').classList.add('sel');
+  const i=$('#loginPw'); if(i) i.focus();
+}
+function doLogin(){
+  const id = PICKED_USER || ROOT.activeUser;
+  const u = ROOT.users[id];
+  const v = $('#loginPw').value;
+  if(u && pwHash(v)===u.pw) loginAs(id);
+  else renderLogin(true);
+}
 
 /* ---------- daily practice-time tracking ----------
    Counts a 10 s tick whenever the page is visible AND the user was active
@@ -95,15 +177,18 @@ function resultDay(r){ return r.day || dayKeyOf(new Date(r.id)); }
 function applyLang(){
   document.querySelectorAll('[data-i18n]').forEach(el=>{ el.textContent = t(el.dataset.i18n); });
   document.querySelectorAll('.lbtn').forEach(b=> b.classList.toggle('active', b.dataset.lang===LANG));
+  const un = document.getElementById('userName');
+  if(un) un.textContent = currentUserName();
 }
 document.querySelectorAll('.lbtn').forEach(b=> b.addEventListener('click', ()=>{
-  LANG = b.dataset.lang; S.lang = LANG; save(); applyLang(); rerender();
+  LANG = b.dataset.lang; ROOT.lang = LANG; save(); applyLang(); rerender();
 }));
 
 /* ---------- routing ---------- */
 let VIEW = {name:'home', grade:4};
 let SES = null;   // current test session
 function rerender(){
+  if(!LOGGED_IN && !ADMIN_OK){ renderLogin(); return; }
   if(VIEW.name==='home') renderHome();
   else if(VIEW.name==='test') renderQuestion();
   else if(VIEW.name==='result') renderResult(VIEW.res);
@@ -711,5 +796,7 @@ function confettiBurst(){
 
 /* ---------- boot ---------- */
 $('#adminBtn').addEventListener('click', ()=>adminGate());
+const userBtn = document.getElementById('userChip');
+if(userBtn) userBtn.addEventListener('click', ()=>logoutUser());
 applyLang();
-renderHome();
+renderLogin();

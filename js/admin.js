@@ -13,14 +13,15 @@ function adminGate(){
 }
 function tryLogin(){
   const v = $('#pwInp').value;
-  if(enc(v)===S.adminPw){ ADMIN_OK=true; closeModal(); VIEW={name:'admin'}; renderAdmin(); }
+  if(pwHash(v)===ROOT.adminPw){ ADMIN_OK=true; closeModal(); VIEW={name:'admin'};
+    document.getElementById('topbar').style.display=''; renderAdmin(); }
   else $('#pwErr').textContent = t('wrongPw');
 }
-function adminLogout(){ ADMIN_OK=false; goHome(); }
+function adminLogout(){ ADMIN_OK=false; if(LOGGED_IN) goHome(); else renderLogin(); }
 
 function renderAdmin(){
   updateChip();
-  const tabs = [['progress',t('tab_progress')],['days',t('tab_days')],['results',t('tab_results')],['attempts',t('tab_attempts')],['credits',t('tab_gadget')],['solutions',t('tab_solutions')],['settings',t('tab_settings')]];
+  const tabs = [['users',t('tab_users')],['progress',t('tab_progress')],['days',t('tab_days')],['results',t('tab_results')],['attempts',t('tab_attempts')],['credits',t('tab_gadget')],['solutions',t('tab_solutions')],['settings',t('tab_settings')]];
   let html = `<button class="back-link" onclick="goHome()">${t('backHome')}</button>
   <div class="admin-wrap">
     <h2 style="color:var(--purple-d);margin-bottom:12px">🛠️ ${t('adminPanel')}</h2>
@@ -28,7 +29,8 @@ function renderAdmin(){
       <button class="atab" style="margin-left:auto;background:#ffe3e6;color:var(--red)" onclick="adminLogout()">🚪 ${t('logout')}</button>
     </div>
     <div class="admin-section">`;
-  if(ATAB==='progress') html += adminProgress();
+  if(ATAB==='users') html += adminUsers();
+  else if(ATAB==='progress') html += adminProgress();
   else if(ATAB==='days') html += adminDays();
   else if(ATAB==='results') html += adminResults();
   else if(ATAB==='attempts') html += adminAttempts();
@@ -38,6 +40,106 @@ function renderAdmin(){
   html += `</div></div>`;
   $('#app').innerHTML = html;
   window.scrollTo(0,0);
+}
+
+/* ---- users tab ---- */
+function adminUsers(){
+  const rows = Object.entries(ROOT.users).map(([id,u])=>{
+    const d = u.data || {};
+    const res = (d.results||[]).length;
+    const avg = res ? Math.round(d.results.reduce((s,r)=>s+r.pct,0)/res) : null;
+    const mins = Math.round(Object.values(d.days||{}).reduce((a,b)=>a+b,0)/60);
+    const active = id===ROOT.activeUser;
+    return `<div class="user-row ${active?'active':''}">
+      <div class="ur-main"><span class="ub-ava">${esc((u.name||'?')[0].toUpperCase())}</span>
+        <div><b>${esc(u.name)}</b>${active?` <span class="pill g">${t('activeUser')}</span>`:''}
+        <br><small>📝 ${res} · 🎯 ${avg!==null?avg+'%':'–'} · ⏱ ${mins} ${t('min')} · 📅 ${esc(u.created||'')}</small></div></div>
+      <div class="ur-btns">
+        <button class="mini-btn" onclick="switchUser('${id}')">${t('switchTo')}</button>
+        <button class="mini-btn gray" onclick="resetUserPw('${id}')">${t('newPw')}</button>
+        <button class="mini-btn" style="background:var(--teal)" onclick="showSyncCode('${id}')">${t('syncCode')}</button>
+        ${Object.keys(ROOT.users).length>1?`<button class="mini-btn" style="background:var(--red)" onclick="deleteUser('${id}')">🗑</button>`:''}
+      </div></div>`;
+  }).join('');
+  return `<h3>${t('tab_users')}</h3>${rows}
+  <h3 style="margin-top:20px">${t('newUser')}</h3>
+  <div class="adj-form">
+    <input type="text" id="nuName" placeholder="${t('userNameField')}" style="min-width:150px">
+    <input type="text" id="nuPw" placeholder="${t('password')}" style="min-width:150px">
+    <button class="mini-btn" onclick="addUser()">${t('add')}</button>
+    <span id="nuMsg" style="color:var(--green);font-weight:800"></span>
+  </div>
+  <h3 style="margin-top:22px">${t('syncTitle')}</h3>
+  <p class="hint">${t('syncHow')}</p>
+  <div class="adj-form">
+    <button class="mini-btn" onclick="showSyncCode(ROOT.activeUser)">📤 ${t('syncMake')}</button>
+    <button class="mini-btn gray" onclick="importSyncPrompt()">📥 ${t('syncLoad')}</button>
+  </div>`;
+}
+function switchUser(id){
+  if(!ROOT.users[id]) return;
+  ROOT.activeUser = id; S = userData(id); save();
+  ATAB='users'; renderAdmin(); updateChip();
+}
+function addUser(){
+  const name = ($('#nuName').value||'').trim();
+  const pw = ($('#nuPw').value||'').trim();
+  if(name.length<2 || pw.length<4){ $('#nuMsg').textContent='⚠️'; $('#nuMsg').style.color='var(--red)'; return; }
+  let id = name.toLowerCase().replace(/[^a-z0-9]/g,'') || ('u'+Date.now());
+  while(ROOT.users[id]) id += '1';
+  ROOT.users[id] = { name, pw:pwHash(pw), created:new Date().toISOString().slice(0,10), data:blankProgress() };
+  save(); renderAdmin();
+}
+function resetUserPw(id){
+  const pw = prompt(t('newPw')+':');
+  if(!pw || pw.trim().length<4) return;
+  ROOT.users[id].pw = pwHash(pw.trim()); save();
+  showModal(`<button class="close-x" onclick="closeModal()">✕</button><h3>✅ ${t('saved')}</h3>
+    <p style="font-weight:700">${esc(ROOT.users[id].name)}: ${t('password')} → <b>${esc(pw.trim())}</b></p>`);
+}
+function deleteUser(id){
+  if(Object.keys(ROOT.users).length<2) return;
+  if(!confirm(t('delUserConfirm')+' '+ROOT.users[id].name+'?')) return;
+  delete ROOT.users[id];
+  if(ROOT.activeUser===id){ ROOT.activeUser=Object.keys(ROOT.users)[0]; S=userData(ROOT.activeUser); }
+  save(); renderAdmin();
+}
+function showSyncCode(id){
+  const u = ROOT.users[id];
+  const payload = enc(JSON.stringify({n:u.name, p:u.pw, c:u.created, d:u.data}));
+  showModal(`<button class="close-x" onclick="closeModal()">✕</button>
+    <h3>📤 ${t('syncCode')} – ${esc(u.name)}</h3>
+    <p class="hint">${t('syncCopyHint')}</p>
+    <textarea id="syncOut" class="sync-box" readonly>${payload}</textarea>
+    <button class="btn primary" style="width:100%;margin-top:10px" onclick="copySync()">📋 ${t('copy')}</button>
+    <div id="copyMsg" style="text-align:center;font-weight:800;color:var(--green);margin-top:6px"></div>`);
+}
+function copySync(){
+  const ta = document.getElementById('syncOut');
+  ta.select(); ta.setSelectionRange(0,999999);
+  try{ document.execCommand('copy'); document.getElementById('copyMsg').textContent = t('copied'); }
+  catch(e){ document.getElementById('copyMsg').textContent = '⚠️'; }
+}
+function importSyncPrompt(){
+  showModal(`<button class="close-x" onclick="closeModal()">✕</button>
+    <h3>📥 ${t('syncLoad')}</h3>
+    <p class="hint">${t('syncPasteHint')}</p>
+    <textarea id="syncIn" class="sync-box" placeholder="..."></textarea>
+    <button class="btn primary" style="width:100%;margin-top:10px" onclick="applySync()">${t('syncApply')}</button>
+    <div id="syncMsg" style="text-align:center;font-weight:800;margin-top:6px"></div>`);
+}
+function applySync(){
+  const raw = (document.getElementById('syncIn').value||'').trim();
+  const msg = document.getElementById('syncMsg');
+  try{
+    const o = JSON.parse(dec(raw));
+    if(!o || !o.n || !o.d) throw new Error('bad');
+    let id = o.n.toLowerCase().replace(/[^a-z0-9]/g,'') || ('u'+Date.now());
+    ROOT.users[id] = { name:o.n, pw:o.p, created:o.c||new Date().toISOString().slice(0,10), data:o.d };
+    ROOT.activeUser = id; S = userData(id); save();
+    msg.style.color='var(--green)'; msg.textContent = t('saved');
+    setTimeout(()=>{ closeModal(); ATAB='users'; renderAdmin(); updateChip(); }, 700);
+  }catch(e){ msg.style.color='var(--red)'; msg.textContent = t('syncBad'); }
 }
 
 /* ---- progress dashboard ---- */
@@ -322,11 +424,11 @@ function adminSettings(){
 function changePw(){
   const v = $('#newPw').value.trim();
   if(v.length<3) return;
-  S.adminPw = enc(v); save();
+  ROOT.adminPw = pwHash(v); save();
   $('#pwSaved').textContent = t('saved');
 }
 function exportData(){
-  const blob = new Blob([JSON.stringify(S,null,2)],{type:'application/json'});
+  const blob = new Blob([JSON.stringify(ROOT,null,2)],{type:'application/json'});
   const a = document.createElement('a');
   a.href = URL.createObjectURL(blob);
   a.download = 'lernportal-backup-'+new Date().toISOString().slice(0,10)+'.json';
@@ -337,13 +439,16 @@ function importData(inp){
   const rd = new FileReader();
   rd.onload = ()=>{ try{
     const d = JSON.parse(rd.result);
-    if(d && d.results){ S = d; save(); LANG=S.lang||'de'; applyLang(); renderAdmin(); }
+    if(d && d.users){ ROOT = d; }                       // new multi-user backup
+    else if(d && d.results){ ROOT = defaultRoot(); ROOT.users.timur.data = d; }   // old backup
+    else throw new Error('bad');
+    if(!ROOT.users[ROOT.activeUser]) ROOT.activeUser = Object.keys(ROOT.users)[0];
+    S = userData(ROOT.activeUser); save(); LANG=ROOT.lang||'de'; applyLang(); renderAdmin(); updateChip();
   }catch(e){ alert('Import error'); } };
   rd.readAsText(f);
 }
 function resetAllData(){
   if(!confirm(t('resetConfirm'))) return;
-  const pw = S.adminPw;
-  S = defaultState(); S.adminPw = pw; save();
-  renderAdmin(); updateChip();
+  S.results=[]; S.attempts={}; S.extra={}; S.adj=[]; S.days={}; S.levels={}; S.lessonsSeen={};
+  save(); renderAdmin(); updateChip();
 }

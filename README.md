@@ -10,6 +10,20 @@ All progress, results and credits are saved automatically in that browser (local
 > Tip: put a shortcut to `index.html` on the desktop of the computer/tablet he uses.
 > Important: always use the **same browser on the same device**, otherwise results are stored separately.
 
+## 👤 Users
+
+The site opens with a login screen. **Timur / `Baydoun1984`** is set up. Each user has completely separate progress (results, levels, lessons read, gadget minutes, practice time).
+
+Admin → **👥 Benutzer**: create more users (name + password), switch user, reset a password, delete a user, and see each user's test count, average and practice time at a glance.
+
+### Continuing on another device
+
+Progress is stored in the browser of each device, so it does **not** sync by itself. To move it: on the old device open Admin → 👥 Benutzer → **Sync-Code erstellen**, copy the code (e.g. send it to yourself in WhatsApp), then on the new device Admin → **Sync-Code laden** and paste it. Everything comes along — results, levels, gadget minutes, streak. Do the same in reverse when he switches back. (The admin JSON export/import in Einstellungen does the same for *all* users at once.)
+
+> Real automatic sync across devices would need a server/database with an account. Say the word and I can set that up — it means his data would live online rather than only on your devices.
+
+⚠️ **Security note:** this is a friendly gate, not a bank. The site's code is public on GitHub, so treat the passwords as "keeps a kid out", not as strong security. Passwords are stored only as one-way hashes — no plaintext anywhere in the code or the browser storage.
+
 ## 🎮 Daily gadget time (the whole point)
 
 Every day he starts at **0 minutes** and earns gadget time by working on the platform, up to **120 minutes (2 h) per day**. A meter at the top shows the current balance live.
