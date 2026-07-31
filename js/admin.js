@@ -20,7 +20,7 @@ function adminLogout(){ ADMIN_OK=false; goHome(); }
 
 function renderAdmin(){
   updateChip();
-  const tabs = [['days',t('tab_days')],['results',t('tab_results')],['attempts',t('tab_attempts')],['credits',t('tab_credits')],['solutions',t('tab_solutions')],['settings',t('tab_settings')]];
+  const tabs = [['progress',t('tab_progress')],['days',t('tab_days')],['results',t('tab_results')],['attempts',t('tab_attempts')],['credits',t('tab_gadget')],['solutions',t('tab_solutions')],['settings',t('tab_settings')]];
   let html = `<button class="back-link" onclick="goHome()">${t('backHome')}</button>
   <div class="admin-wrap">
     <h2 style="color:var(--purple-d);margin-bottom:12px">🛠️ ${t('adminPanel')}</h2>
@@ -28,7 +28,8 @@ function renderAdmin(){
       <button class="atab" style="margin-left:auto;background:#ffe3e6;color:var(--red)" onclick="adminLogout()">🚪 ${t('logout')}</button>
     </div>
     <div class="admin-section">`;
-  if(ATAB==='days') html += adminDays();
+  if(ATAB==='progress') html += adminProgress();
+  else if(ATAB==='days') html += adminDays();
   else if(ATAB==='results') html += adminResults();
   else if(ATAB==='attempts') html += adminAttempts();
   else if(ATAB==='credits') html += adminCredits();
@@ -37,6 +38,91 @@ function renderAdmin(){
   html += `</div></div>`;
   $('#app').innerHTML = html;
   window.scrollTo(0,0);
+}
+
+/* ---- progress dashboard ---- */
+function dayStreak(){
+  const days = new Set([...Object.keys(S.days||{}).filter(k=>S.days[k]>=60), ...S.results.map(r=>resultDay(r))]);
+  let streak = 0;
+  const d = new Date();
+  for(;;){
+    const k = dayKeyOf(d);
+    if(days.has(k)) streak++;
+    else if(streak>0 || k!==todayKey()) break;      // today may still be empty
+    d.setDate(d.getDate()-1);
+    if(streak>400) break;
+  }
+  return streak;
+}
+function statBox(icon,val,label){
+  return `<div class="stat-box"><div class="sb-ico">${icon}</div><div class="sb-val">${val}</div><div class="sb-lab">${label}</div></div>`;
+}
+function progressBarRow(label, done, total, extra){
+  const pct = total ? Math.round(done/total*100) : 0;
+  return `<div class="prog-row"><div class="pr-top"><span>${esc(label)}</span><span>${done}/${total}${extra?' · '+extra:''}</span></div>
+    <div class="pr-bar"><div style="width:${pct}%"></div></div></div>`;
+}
+function adminProgress(){
+  if(!S.results.length && !Object.keys(lessonsDone()).length)
+    return `<h3>${t('progTitle')}</h3><p style="font-weight:700;color:#888">${t('progNone')}</p>`;
+  const seen = Object.keys(lessonsDone()).length;
+  const totalLessons = Object.keys(LESSONS).length;
+  const doneTests = new Set(S.results.map(r=>r.testId)).size;
+  const totalTests = ALL_TESTS.filter(x=>!x.levelOnly).length;
+  const avg = S.results.length ? Math.round(S.results.reduce((s,r)=>s+r.pct,0)/S.results.length) : 0;
+  const totalMin = Math.round(Object.values(S.days||{}).reduce((a,b)=>a+b,0)/60);
+  const lvls = LEVELS.filter((_,i)=>levelPassed(i)).length;
+  // per subject
+  const subj = {};
+  ALL_TESTS.filter(x=>!x.levelOnly).forEach(x=>{ (subj[x.subject]=subj[x.subject]||{tot:0,done:new Set(),pcts:[]}).tot++; });
+  S.results.forEach(r=>{ const test=testById(r.testId); if(test&&subj[test.subject]){ subj[test.subject].done.add(r.testId); subj[test.subject].pcts.push(r.pct); } });
+  const subjRows = SUBJECT_ORDER.filter(s=>subj[s]).map(s=>{
+    const d=subj[s]; const a=d.pcts.length?Math.round(d.pcts.reduce((x,y)=>x+y,0)/d.pcts.length):null;
+    return progressBarRow(SUBJECT_ICON[s]+' '+t('subj_'+s), d.done.size, d.tot, a!==null?('Ø '+a+'%'):'');
+  }).join('');
+  // per grade
+  const gr = {};
+  ALL_TESTS.filter(x=>!x.levelOnly).forEach(x=>{ (gr[x.grade]=gr[x.grade]||{tot:0,done:new Set()}).tot++; });
+  S.results.forEach(r=>{ const test=testById(r.testId); if(test&&gr[test.grade]) gr[test.grade].done.add(r.testId); });
+  const grRows = Object.keys(gr).sort((a,b)=>a-b).map(g=>progressBarRow(t('gradeShort')+' '+g, gr[g].done.size, gr[g].tot)).join('');
+  // last 14 days sparkline
+  const days=[]; const d=new Date();
+  for(let i=13;i>=0;i--){ const dd=new Date(d); dd.setDate(d.getDate()-i); days.push(dayKeyOf(dd)); }
+  const bars = days.map(k=>{
+    const m = gadgetMinutesFor(k);
+    const h = Math.max(3, Math.round(m/DAILY_CAP*70));
+    return `<div class="spark-col" title="${fmtDayLabel(k)}: ${m} Min">
+      <div class="spark-bar" style="height:${h}px;background:${m>=60?'var(--green)':m>0?'var(--orange)':'#ddd'}"></div>
+      <span>${k.slice(8)}</span></div>`;
+  }).join('');
+  // strengths / weaknesses by lesson topic
+  const topic = {};
+  S.results.forEach(r=>(r.details||[]).forEach(dt=>{
+    if(!dt.h || !LESSONS[dt.h]) return;
+    const o = topic[dt.h] = topic[dt.h] || {got:0,max:0};
+    o.got += dt.pts; o.max += dt.max;
+  }));
+  const rated = Object.entries(topic).filter(([,o])=>o.max>=3)
+    .map(([k,o])=>({k, pct:Math.round(o.got/o.max*100), max:o.max}));
+  const strong = rated.filter(x=>x.pct>=80).sort((a,b)=>b.pct-a.pct).slice(0,6);
+  const weak = rated.filter(x=>x.pct<70).sort((a,b)=>a.pct-b.pct).slice(0,6);
+  return `<h3>${t('progTitle')}</h3>
+  <div class="stat-grid">
+    ${statBox('🎓', seen+'/'+totalLessons, t('progLessons'))}
+    ${statBox('📝', doneTests+'/'+totalTests, t('progTests'))}
+    ${statBox('🎯', avg+'%', t('progAvg'))}
+    ${statBox('🔥', dayStreak(), t('progStreak'))}
+    ${statBox('⏱', totalMin+' '+t('min'), t('progTime'))}
+    ${statBox('🗺️', lvls+'/'+LEVELS.length, t('progLevels'))}
+  </div>
+  <h3 style="margin-top:20px">${t('progLast14')}</h3>
+  <div class="sparkline">${bars}</div>
+  <h3 style="margin-top:20px">${t('progBySubject')}</h3>${subjRows}
+  <h3 style="margin-top:20px">${t('progByGrade')}</h3>${grRows}
+  ${strong.length?`<h3 style="margin-top:20px">${t('progStrong')}</h3>
+    ${strong.map(x=>`<div class="att-row"><span>${esc(lessonTitle(x.k))}</span><span class="pill g">${x.pct}%</span></div>`).join('')}`:''}
+  ${weak.length?`<h3 style="margin-top:20px">${t('progWeak')}</h3>
+    ${weak.map(x=>`<div class="att-row"><span>${esc(lessonTitle(x.k))}</span><span class="pill ${x.pct<50?'r':'o'}">${x.pct}%</span></div>`).join('')}`:''}`;
 }
 
 /* ---- daily log tab ---- */

@@ -114,23 +114,25 @@ engPerfect:{ de:[['Present Perfect einfach erklärt (auf Deutsch)','https://www.
 });
 function ytIdOf(url){ const m = url.match(/[?&]v=([\w-]+)/); return m ? m[1] : null; }
 function videoHTML(topic){
-  const v = VIDEOS[topic]; if(!v) return '';
+  const res = (typeof videosForLesson==='function') ? videosForLesson(topic) : (VIDEOS[topic] ? {key:topic, v:VIDEOS[topic], alias:false} : null);
+  if(!res) return '';
+  const {key, v, alias} = res;
   const de = v.de||[], ru = v.ru||[];
-  if(!de.length && !ru.length) return '';
   let h = `<div class="video-box"><div class="video-head">🎬 ${t('videos')}</div>`;
-  de.forEach((x,i)=>{ h += `<button class="vid-link" onclick="playVideo('${topic}','de',${i})">🇩🇪 ▶ ${esc(x[0])}</button>`; });
-  ru.forEach((x,i)=>{ h += `<button class="vid-link" onclick="playVideo('${topic}','ru',${i})">🇷🇺 ▶ ${esc(x[0])}</button>`; });
+  if(alias) h += `<div class="vid-alias">${t('relatedVideo')}</div>`;
+  de.forEach((x,i)=>{ h += `<button class="vid-link" onclick="playVideo('${key}','de',${i})">🇩🇪 ▶ ${esc(x[0])}</button>`; });
+  ru.forEach((x,i)=>{ h += `<button class="vid-link" onclick="playVideo('${key}','ru',${i})">🇷🇺 ▶ ${esc(x[0])}</button>`; });
   return h + '</div>';
 }
+/* Plays inside the site only – deliberately no link out to YouTube. */
 function playVideo(topic, lang, i){
   const entry = (VIDEOS[topic]||{})[lang]?.[i]; if(!entry) return;
   const [title, url] = entry;
   const id = ytIdOf(url);
-  if(!id){ window.open(url, '_blank'); return; }
+  if(!id) return;
   showModal(`<button class="close-x" onclick="closeModal()">✕</button>
     <h3>🎬 ${esc(title)}</h3>
-    <div class="player-16x9"><iframe src="https://www.youtube-nocookie.com/embed/${id}?autoplay=1&rel=0"
+    <div class="player-16x9"><iframe src="https://www.youtube-nocookie.com/embed/${id}?autoplay=1&rel=0&modestbranding=1&playsinline=1"
       title="${esc(title)}" allow="autoplay; encrypted-media; picture-in-picture" allowfullscreen></iframe></div>
-    <p class="hint" style="margin-top:10px">${t('videoHint')}</p>
-    <a class="vid-link" href="${url}" target="_blank" rel="noopener">▶ ${t('watchYt')}</a>`, 'video');
+    <p class="hint" style="margin-top:10px">${t('videoHint')}</p>`, 'video');
 }

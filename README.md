@@ -20,7 +20,11 @@ Per test, the **best attempt of that day** counts: ≥90 % → 30 min · ≥80 %
 
 **📚 Freies Training (start page)** — browse by grade (1 → 10) and subject, pick any test directly.
 
-**🎓 Lektionen** — **147 lessons** from Klasse 1 to Klasse 10. Each lesson has the full explanation in German, Russian and English, the matching explainer videos (playable in-page), an **Übungsheft** (workbook: practice questions that never count towards grades and can be repeated endlessly), and links to the real tests on that topic. This is the section for daily learning.
+**🎓 Lektionen** — **147 lessons** from Klasse 1 to Klasse 10. **Every single lesson has both a full written explanation (German + Russian + English) and at least one real explainer video** — 188 hand-checked videos in total. Videos play **inside the site only**; there is deliberately no link to YouTube anywhere, so he cannot drift off into the YouTube feed. Each lesson also has an **Übungsheft** (workbook: practice questions that never count towards grades, repeat as often as he likes) and links to the real tests on that topic. Where a topic has no dedicated video of its own, the closest related lesson's video is shown and clearly marked as such.
+
+## 📈 Seeing his progress
+
+Admin panel → **📈 Fortschritt** shows at a glance: lessons read, tests taken, overall average, **day streak**, total practice time, levels completed, a 14-day bar chart of daily gadget minutes, progress bars per subject and per grade, and automatically computed **💪 strengths** and **📌 topics that need practice** (based on points lost per lesson).
 
 **🗺️ Abenteuer** — a game map with **54 levels** from ⭐ Starter through 👑 Champion (Kl. 5) and on through 🌟 Klasse 6, ⚡ 7, 🔥 8, 💎 9 up to 🎓 Klasse 10 – Abschluss. Each level randomly draws one test from a themed pool (**all 139 tests** are woven into the path). Pass with **≥ 60 %** to unlock the next node; stars show his best score. Videos **play directly in a pop-up player** inside the site.
 

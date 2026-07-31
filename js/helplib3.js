@@ -1,5 +1,188 @@
 /* ============ Lesson theory: Klasse 1–3 + Sprachen (EN/FR/ES/RU) ============ */
 Object.assign(HELP, {
+/* ---------- ausführlichere Fassungen (ersetzen die Kurzversionen) ---------- */
+mental:{
+de:`⚡ Kopfrechnen – die besten Tricks:
+1. ZERLEGEN: Zerlege eine Zahl in Zehner und Einer. 25 + 38 → 25 + 30 = 55 → 55 + 8 = 63.
+2. NACHBARAUFGABEN: Was du schon kennst, hilft dir. 7 · 8 nicht sicher? 7 · 7 = 49, plus 7 = 56.
+3. VERDOPPELN & HALBIEREN: 6 · 14 → 3 · 28 = 84 (einen Faktor halbieren, den anderen verdoppeln).
+4. MIT 10, 100, 1000: Nullen anhängen. 34 · 100 = 3.400.
+5. MIT 9 RECHNEN: erst ·10, dann die Zahl abziehen. 7 · 9 = 70 − 7 = 63.
+6. DIVISION rückwärts denken: 56 : 8 → „8 mal wie viel ist 56?" → 7.
+7. RUNDEN UND KORRIGIEREN: 48 + 37 → 50 + 37 = 87 → minus 2 = 85.
+💡 Übe täglich 5 Minuten – Kopfrechnen wird durch Wiederholung schnell und sicher.`,
+ru:`⚡ Устный счёт – лучшие приёмы:
+1. РАЗЛОЖЕНИЕ: 25 + 38 → 25 + 30 = 55 → 55 + 8 = 63.
+2. СОСЕДНИЕ ПРИМЕРЫ: не помнишь 7 · 8? Возьми 7 · 7 = 49 и прибавь 7 → 56.
+3. УДВОИТЬ И РАЗДЕЛИТЬ ПОПОЛАМ: 6 · 14 → 3 · 28 = 84.
+4. НА 10, 100, 1000: приписывай нули. 34 · 100 = 3.400.
+5. НА 9: сначала ·10, потом вычти число. 7 · 9 = 70 − 7 = 63.
+6. ДЕЛЕНИЕ наоборот: 56 : 8 → «8 умножить на сколько = 56?» → 7.
+7. ОКРУГЛИ И ИСПРАВЬ: 48 + 37 → 50 + 37 = 87 → минус 2 = 85.
+💡 Тренируйся 5 минут в день – скорость придёт быстро.`,
+en:`⚡ Mental maths – the best tricks:
+1. SPLIT numbers: 25 + 38 → 25 + 30 = 55 → 55 + 8 = 63.
+2. NEIGHBOUR FACTS: 7 · 8? Take 7 · 7 = 49 and add 7 → 56.
+3. DOUBLE AND HALVE: 6 · 14 → 3 · 28 = 84.
+4. ×10, ×100: add zeros.
+5. ×9: multiply by 10 and subtract the number. 7 · 9 = 70 − 7 = 63.
+6. DIVISION backwards: 56 ÷ 8 → "8 times what is 56?" → 7.
+7. ROUND AND CORRECT: 48 + 37 → 50 + 37 = 87 → minus 2 = 85.`},
+orderOps:{
+de:`🧮 Rechenregeln – Punkt vor Strich:
+REIHENFOLGE (Merkwort: KLA-PO-PU-STRI):
+1. KLAmmern zuerst ( )
+2. POtenzen (hoch-Zahlen) 2³
+3. PUnktrechnung: Mal · und Geteilt :
+4. STRIchrechnung: Plus + und Minus −
+Beispiele:
+• 5 + 3 · 4 → zuerst 3·4 = 12 → dann 5 + 12 = 17 (NICHT 32!)
+• (5 + 3) · 4 → zuerst die Klammer 8 → dann 8 · 4 = 32
+• 20 − 12 : 4 → zuerst 12:4 = 3 → dann 20 − 3 = 17
+❗ Bei nur Plus und Minus (oder nur Mal und Geteilt) rechnest du einfach von LINKS nach RECHTS.
+💡 Rechenregeln machen Terme eindeutig – ohne sie hätte jede Aufgabe mehrere „richtige" Ergebnisse.`,
+ru:`🧮 Порядок действий:
+ПОРЯДОК:
+1. СКОБКИ ( )
+2. СТЕПЕНИ 2³
+3. УМНОЖЕНИЕ и ДЕЛЕНИЕ
+4. СЛОЖЕНИЕ и ВЫЧИТАНИЕ
+Примеры:
+• 5 + 3 · 4 → сначала 3·4 = 12 → 5 + 12 = 17 (НЕ 32!)
+• (5 + 3) · 4 → сначала скобка 8 → 8 · 4 = 32
+• 20 − 12 : 4 → сначала 12:4 = 3 → 20 − 3 = 17
+❗ Если только + и − (или только · и :), считай СЛЕВА НАПРАВО.`,
+en:`🧮 Order of operations:
+1. Brackets ( ) · 2. Powers · 3. × and ÷ · 4. + and −
+• 5 + 3 · 4 → 3·4 = 12 first → 5 + 12 = 17 (not 32!)
+• (5 + 3) · 4 → bracket first = 8 → 8 · 4 = 32
+❗ With only + and − (or only × and ÷) work from LEFT to RIGHT.`},
+speed:{
+de:`🚗 Geschwindigkeit, Weg und Zeit:
+Die drei Größen hängen zusammen wie in einem Formeldreieck (s oben, v und t unten):
+• v = s : t   (Geschwindigkeit = Weg geteilt durch Zeit)
+• s = v · t   (Weg = Geschwindigkeit mal Zeit)
+• t = s : v   (Zeit = Weg geteilt durch Geschwindigkeit)
+EINHEITEN: km/h (Kilometer pro Stunde) oder m/s (Meter pro Sekunde).
+• Umrechnung: 1 m/s = 3,6 km/h · von km/h zu m/s → durch 3,6 teilen.
+Beispiel-Methode: 240 km in 3 Stunden → 240 : 3 = 80 km/h.
+Beispiel-Methode: 80 km/h für 2,5 h → 80 · 2,5 = 200 km.
+💡 Prüfe immer die EINHEITEN: Wenn die Zeit in Minuten steht, rechne sie zuerst in Stunden um (30 min = 0,5 h)!`,
+ru:`🚗 Скорость, путь, время:
+• v = s : t (скорость = путь : время)
+• s = v · t (путь = скорость · время)
+• t = s : v (время = путь : скорость)
+ЕДИНИЦЫ: км/ч или м/с. 1 м/с = 3,6 км/ч.
+Пример: 240 км за 3 ч → 80 км/ч. Пример: 80 км/ч за 2,5 ч → 200 км.
+💡 Всегда проверяй ЕДИНИЦЫ: минуты сначала переведи в часы (30 мин = 0,5 ч)!`,
+en:`🚗 Speed, distance, time:
+• v = s ÷ t · s = v · t · t = s ÷ v
+Units: km/h or m/s; 1 m/s = 3.6 km/h.
+Example: 240 km in 3 h → 80 km/h. 80 km/h for 2.5 h → 200 km.
+💡 Always check the units – convert minutes to hours first!`},
+rechtSS:{
+de:`✍️ ß oder ss – die Regel:
+Es kommt darauf an, wie der Vokal DAVOR klingt:
+• Nach einem LANGEN Vokal oder einem Doppellaut (au, ei, eu, ie) schreibt man ß:
+  Straße, groß, Fuß, heißen, draußen, Maß, Gruß.
+• Nach einem KURZEN Vokal schreibt man ss:
+  Fluss, essen, Schloss, müssen, wissen, Kuss, dass.
+PROBE: Sprich das Wort langsam und ziehe den Vokal lang. „Straaaße" klingt richtig → ß.
+„Fluuuss" klingt falsch, der Vokal ist kurz und knackig → ss.
+❗ In der Schweiz gibt es kein ß – dort schreibt man immer ss.
+💡 Verwechslungsgefahr: „das" (Artikel/Pronomen) und „dass" (Konjunktion, leitet Nebensatz ein) – Ersatzprobe mit dieses/jenes/welches: geht es, schreibt man „das".`,
+ru:`✍️ ß или ss – правило:
+Всё зависит от гласного ПЕРЕД ним:
+• После ДОЛГОГО гласного или дифтонга (au, ei, eu, ie) → ß:
+  Straße, groß, Fuß, heißen, draußen.
+• После КОРОТКОГО гласного → ss:
+  Fluss, essen, Schloss, müssen, wissen.
+ПРОВЕРКА: произнеси слово, растягивая гласный. «Straaaße» звучит верно → ß.
+❗ В Швейцарии ß не пишут вообще – всегда ss.
+💡 Не путай «das» (артикль/местоимение) и «dass» (союз).`,
+en:`✍️ ß or ss:
+• After a LONG vowel or a diphthong (au, ei, eu, ie) → ß: Straße, groß, Fuß, heißen.
+• After a SHORT vowel → ss: Fluss, essen, Schloss, müssen.
+TEST: say the word slowly and stretch the vowel.
+❗ Switzerland never uses ß – always ss there.`},
+rechtEnd:{
+de:`✍️ Auslaut: b/p, d/t, g/k richtig schreiben:
+Am Wortende klingen b, d und g fast wie p, t und k – man HÖRT den Unterschied nicht!
+Beispiel: „Hund" klingt wie „Hunt", „Berg" klingt wie „Berk".
+DIE LÖSUNG – VERLÄNGERUNGSPROBE:
+Verlängere das Wort (Mehrzahl bilden oder ein Wort anhängen), dann hörst du den richtigen Buchstaben:
+• Hund → die Hunde (man hört d!) · Hut → die Hüte (man hört t!)
+• Berg → die Berge (g!) · Werk → die Werke (k!)
+• Korb → die Körbe (b!) · Kopf → die Köpfe (pf!)
+• er lieb-t → lieben · das Lied → die Lieder
+💡 Diese Probe funktioniert bei Nomen (Mehrzahl bilden) UND bei Verben und Adjektiven (Grundform bilden):
+   lieb → liebe · fremd → fremde · lebendig → lebendige.`,
+ru:`✍️ Конечные b/p, d/t, g/k:
+В конце слова b, d, g звучат почти как p, t, k – на слух не различить!
+«Hund» звучит как «Hunt», «Berg» – как «Berk».
+РЕШЕНИЕ – ПРИЁМ УДЛИНЕНИЯ:
+Удлини слово (множественное число или другая форма) – и услышишь нужную букву:
+• Hund → die Hunde (d!) · Hut → die Hüte (t!)
+• Berg → die Berge (g!) · Werk → die Werke (k!)
+• Korb → die Körbe (b!)
+💡 Работает и с прилагательными: lieb → liebe, fremd → fremde.`,
+en:`✍️ Final b/p, d/t, g/k in German:
+At the end of a word b, d, g sound like p, t, k – you cannot hear the difference.
+THE FIX – lengthen the word: Hund → die Hunde (you hear the d!), Berg → die Berge (g!), Korb → die Körbe (b!).
+It works for adjectives too: lieb → liebe.`},
+engHave:{
+de:`🇬🇧 have got / has got – Besitz ausdrücken:
+FORMEN:
+• I have got · you have got · he/she/it HAS got · we have got · they have got
+VERNEINUNG: haven't got / hasn't got
+  I haven't got a bike. · She hasn't got a dog.
+FRAGE: Have/Has + Person + got ...?
+  Have you got a pen? – Yes, I have. / No, I haven't.
+  Has he got a sister? – Yes, he has. / No, he hasn't.
+💡 Nur bei he/she/it heißt es HAS – wie immer im Englischen!
+UNTERSCHIED: „have got" ist britisches Englisch für Besitz. Amerikaner sagen einfach „have":
+  I have got a car. (BE) = I have a car. (AE)
+❗ „have got" gibt es nur in der GEGENWART. In der Vergangenheit sagt man „had": I had a bike.`,
+ru:`🇬🇧 have got / has got – обладание:
+ФОРМЫ: I/you/we/they have got · he/she/it HAS got
+ОТРИЦАНИЕ: haven't got / hasn't got → I haven't got a bike.
+ВОПРОС: Have/Has + подлежащее + got …?
+  Have you got a pen? – Yes, I have. / No, I haven't.
+💡 Только с he/she/it – HAS!
+РАЗНИЦА: «have got» – британский вариант, американцы говорят просто «have».
+❗ «have got» есть только в настоящем времени; в прошедшем – «had».`,
+en:`🇬🇧 have got / has got:
+I/you/we/they have got · he/she/it HAS got.
+Negative: haven't got / hasn't got. Question: Have you got ...? – Yes, I have.
+"Have got" is British English for possession; American English uses "have".
+It exists only in the present – the past is "had".`},
+engArticles:{
+de:`🇬🇧 a, an und the – die englischen Artikel:
+UNBESTIMMT (a/an) = irgendein, ein beliebiger:
+• a + Konsonanten-LAUT: a dog, a book, a car, a university (klingt wie „juniversity"!)
+• an + Vokal-LAUT: an apple, an egg, an elephant, an hour (das h ist stumm!)
+❗ Entscheidend ist der KLANG des nächsten Wortes, nicht der Buchstabe.
+BESTIMMT (the) = der/die/das, etwas Bekanntes:
+• the sun, the school, the book I bought yesterday.
+KEIN Artikel steht:
+• bei Sprachen: I speak English. · bei Mahlzeiten: after breakfast
+• bei den meisten Ländern und Städten: in Germany, in Paderborn
+• bei allgemeinen Aussagen im Plural: Dogs are friendly.
+💡 a/an gibt es NUR in der Einzahl – im Plural steht „some" oder gar nichts.`,
+ru:`🇬🇧 Артикли a, an, the:
+НЕОПРЕДЕЛЁННЫЙ (a/an):
+• a + согласный ЗВУК: a dog, a book, a university
+• an + гласный ЗВУК: an apple, an elephant, an hour (h не читается!)
+❗ Важен ЗВУК, а не буква.
+ОПРЕДЕЛЁННЫЙ (the) – о чём-то известном: the sun, the school.
+БЕЗ артикля: языки (I speak English), страны и города (in Germany), общие утверждения во мн. числе (Dogs are friendly).
+💡 a/an бывает ТОЛЬКО в единственном числе.`,
+en:`🇬🇧 a, an and the:
+• a + consonant SOUND: a dog, a university.
+• an + vowel SOUND: an apple, an hour.
+• the = something known: the sun, the school.
+No article with languages, most countries, and general plurals (Dogs are friendly).`},
+
 /* ---------- Klasse 1–3 ---------- */
 zr10:{
 de:`🔟 Zahlen bis 10:
