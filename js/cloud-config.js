@@ -1,19 +1,16 @@
 /* ============ CLOUD CONFIG ============
-   Fill these in ONCE and every device that opens the website syncs automatically.
-   Get the two values from your free Supabase project:
-     Supabase → Project Settings → API → "Project URL" and "anon public" key.
+   Diese Werte sind fest in die Website eingebaut: JEDES Gerät synchronisiert
+   damit automatisch. Es muss niemand mehr etwas eintippen.
 
-   url  = https://xxxxxxxxxxxx.supabase.co
-   key  = the long "anon public" key
-   row  = any hard-to-guess id for your family's record (keep it secret)
-   pass = passphrase used to encrypt the data before it leaves the browser
-
-   Until this is filled in, the portal works exactly as before (offline only)
-   and you can also enter the same values by hand in Admin → ☁️ Cloud.
+   url  = Supabase Project URL
+   key  = Supabase "Publishable"-Key (darf öffentlich sein – NIEMALS den Secret-Key!)
+   row  = geheime Kennung eures Datensatzes
+   pass = Passwort, mit dem die Daten IM BROWSER verschlüsselt werden,
+          bevor sie hochgeladen werden (Supabase sieht nur unlesbare Zeichen)
 */
 const CLOUD_CONFIG = {
-  url:  '',
-  key:  '',
-  row:  'baydoun-lernportal-9f3a71c4',
-  pass: 'Timur-Lernportal-2026-9f3a71c4'
+  url:  'https://pelbuttkpcdacrisuyqf.supabase.co',
+  key:  'sb_publishable_Aj0CgEpzoP79hfwX6ByTmg_KLrd1RpD',
+  row:  'baydoun-familie-lernportal-7c41f9',
+  pass: 'Timur-Lernportal-2026-7c41f9-Baydoun'
 };

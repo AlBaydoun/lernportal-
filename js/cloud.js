@@ -115,7 +115,9 @@ async function cloudSync(reason){
   if(!cloudOn() || CLOUD_BUSY) return;
   CLOUD_BUSY = true; CLOUD_STATE='sync'; updateCloudBadge();
   try{
-    const remote = await cloudPull();
+    let remote = null;
+    try { remote = await cloudPull(); }
+    catch(e){ if(!/HTTP 40[0-9]/.test(String(e.message))) throw e; }   // empty/blocked read must not stop the upload
     if(remote && remote.root && remote.root.users){
       const merged = mergeRoot(ROOT, remote.root);
       ROOT = merged;
