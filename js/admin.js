@@ -21,7 +21,7 @@ function adminLogout(){ ADMIN_OK=false; if(LOGGED_IN) goHome(); else renderLogin
 
 function renderAdmin(){
   updateChip();
-  const tabs = [['users',t('tab_users')],['progress',t('tab_progress')],['days',t('tab_days')],['results',t('tab_results')],['attempts',t('tab_attempts')],['credits',t('tab_gadget')],['solutions',t('tab_solutions')],['settings',t('tab_settings')]];
+  const tabs = [['cloud',t('tab_cloud')],['users',t('tab_users')],['progress',t('tab_progress')],['days',t('tab_days')],['results',t('tab_results')],['attempts',t('tab_attempts')],['credits',t('tab_gadget')],['solutions',t('tab_solutions')],['settings',t('tab_settings')]];
   let html = `<button class="back-link" onclick="goHome()">${t('backHome')}</button>
   <div class="admin-wrap">
     <h2 style="color:var(--purple-d);margin-bottom:12px">🛠️ ${t('adminPanel')}</h2>
@@ -29,7 +29,8 @@ function renderAdmin(){
       <button class="atab" style="margin-left:auto;background:#ffe3e6;color:var(--red)" onclick="adminLogout()">🚪 ${t('logout')}</button>
     </div>
     <div class="admin-section">`;
-  if(ATAB==='users') html += adminUsers();
+  if(ATAB==='cloud') html += adminCloud();
+  else if(ATAB==='users') html += adminUsers();
   else if(ATAB==='progress') html += adminProgress();
   else if(ATAB==='days') html += adminDays();
   else if(ATAB==='results') html += adminResults();
@@ -40,6 +41,71 @@ function renderAdmin(){
   html += `</div></div>`;
   $('#app').innerHTML = html;
   window.scrollTo(0,0);
+}
+
+/* ---- cloud tab ---- */
+const SQL_SNIPPET = `create table if not exists progress (
+  id text primary key,
+  payload text,
+  updated_at timestamptz default now()
+);
+alter table progress enable row level security;
+create policy "portal read"  on progress for select using (true);
+create policy "portal write" on progress for insert with check (true);
+create policy "portal update" on progress for update using (true);`;
+
+function adminCloud(){
+  const c = cloudCfg() || {};
+  const baked = (typeof CLOUD_CONFIG!=='undefined' && CLOUD_CONFIG && CLOUD_CONFIG.url);
+  const state = !cloudOn() ? `<span class="pill r">${t('cloudOff')}</span>`
+    : CLOUD_STATE==='ok' ? `<span class="pill g">${t('cloudOk')}</span>`
+    : CLOUD_STATE==='err' ? `<span class="pill r">${t('cloudErr')}</span>`
+    : `<span class="pill o">${t('cloudIdle')}</span>`;
+  return `<h3>☁️ ${t('tab_cloud')} ${state}</h3>
+  <p class="hint">${t('cloudWhat')}</p>
+  ${CLOUD_MSG?`<p style="font-weight:800;color:${CLOUD_STATE==='err'?'var(--red)':'var(--green)'}">
+    ${CLOUD_STATE==='err'?'⚠️ '+esc(CLOUD_MSG):'✅ '+t('lastSync')+': '+esc(CLOUD_MSG)}</p>`:''}
+  ${cloudOn()?`<div style="display:flex;gap:8px;flex-wrap:wrap;margin:10px 0">
+      <button class="mini-btn" onclick="cloudSync('manual').then(()=>renderAdmin())">🔄 ${t('syncNow')}</button>
+      <button class="mini-btn gray" onclick="cloudDownload()">📥 ${t('cloudPullBtn')}</button>
+    </div>`:''}
+  ${baked?`<p class="hint">${t('cloudBaked')}</p>`:`
+  <h3 style="margin-top:18px">${t('cloudSetup')}</h3>
+  <ol class="setup-list">
+    <li>${t('cloudStep1')}</li>
+    <li>${t('cloudStep2')}<pre class="sql-box">${esc(SQL_SNIPPET)}</pre></li>
+    <li>${t('cloudStep3')}</li>
+  </ol>
+  <div class="adj-form" style="flex-direction:column;align-items:stretch">
+    <input type="text" id="cUrl" placeholder="https://xxxx.supabase.co" value="${esc((ROOT.cloud||{}).url||'')}">
+    <input type="text" id="cKey" placeholder="anon public key" value="${esc((ROOT.cloud||{}).key||'')}">
+    <input type="text" id="cRow" placeholder="${t('cloudRow')}" value="${esc((ROOT.cloud||{}).row||'baydoun-lernportal-9f3a71c4')}">
+    <input type="text" id="cPass" placeholder="${t('cloudPass')}" value="${esc((ROOT.cloud||{}).pass||'Timur-Lernportal-2026-9f3a71c4')}">
+    <div style="display:flex;gap:8px;flex-wrap:wrap">
+      <button class="mini-btn" onclick="saveCloudCfg()">💾 ${t('cloudConnect')}</button>
+      ${(ROOT.cloud&&ROOT.cloud.url)?`<button class="mini-btn gray" onclick="clearCloudCfg()">${t('cloudDisconnect')}</button>`:''}
+    </div>
+    <div id="cloudMsg" style="font-weight:800;margin-top:6px"></div>
+  </div>`}
+  <p class="hint" style="margin-top:14px">${t('cloudPrivacy')}</p>`;
+}
+function saveCloudCfg(){
+  const url=($('#cUrl').value||'').trim(), key=($('#cKey').value||'').trim();
+  const row=($('#cRow').value||'').trim(), pass=($('#cPass').value||'').trim();
+  const msg=document.getElementById('cloudMsg');
+  if(!url || !key || !row){ msg.style.color='var(--red)'; msg.textContent='⚠️'; return; }
+  backupNow('before-cloud');
+  ROOT.cloud = {url, key, row, pass};
+  save();
+  msg.style.color='var(--purple-d)'; msg.textContent='…';
+  cloudSync('connect').then(()=>{ renderAdmin(); });
+}
+function clearCloudCfg(){
+  if(!confirm(t('cloudDisconnectConfirm'))) return;
+  delete ROOT.cloud; save(); CLOUD_STATE='off'; CLOUD_MSG=''; renderAdmin();
+}
+function cloudDownload(){
+  cloudSync('pull').then(()=>{ updateChip(); renderAdmin(); });
 }
 
 /* ---- users tab ---- */

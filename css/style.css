@@ -267,6 +267,14 @@ select.sel-test{font-size:1rem;font-weight:700;padding:10px;border-radius:12px;b
 .ri-title{font-weight:800;font-size:.92rem}
 .ri-meta{font-size:.78rem;opacity:.8;font-weight:700;white-space:nowrap}
 
+/* ============ cloud ============ */
+.cloud-badge{font-size:1.1rem;cursor:default;user-select:none}
+.setup-list{margin:8px 0 8px 20px;line-height:1.7;font-weight:700;font-size:.9rem}
+.setup-list li{margin-bottom:8px}
+.sql-box{background:#2d3436;color:#dfe6e9;border-radius:10px;padding:10px 12px;font-size:.72rem;
+  overflow-x:auto;margin-top:6px;white-space:pre;font-family:monospace}
+.adj-form input{width:100%}
+
 /* ============ login & users ============ */
 .login-wrap{display:flex;align-items:center;justify-content:center;min-height:80vh;padding:14px}
 .login-card{background:rgba(255,255,255,.96);border-radius:26px;box-shadow:0 20px 60px rgba(40,30,110,.35);

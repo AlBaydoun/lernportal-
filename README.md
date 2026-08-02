@@ -10,6 +10,23 @@ All progress, results and credits are saved automatically in that browser (local
 > Tip: put a shortcut to `index.html` on the desktop of the computer/tablet he uses.
 > Important: always use the **same browser on the same device**, otherwise results are stored separately.
 
+## ☁️ Online sync (any device, any browser)
+
+With the cloud switched on, the whole portal state is stored online: Timur logs in on **any** device and continues exactly where he stopped, and you can open the admin panel from your own phone or laptop and see his progress.
+
+**Setup once (~5 min), then it works everywhere — Admin → ☁️ Cloud:**
+1. Create a free account and project at **supabase.com** (choose region Frankfurt/EU).
+2. Open the project's **SQL Editor**, paste the SQL shown in the admin panel, press RUN.
+3. Go to **Project Settings → API**, copy **Project URL** and the **anon public** key into the admin panel, press *Verbinden & hochladen*.
+
+That immediately uploads the progress that already exists on this device — nothing is lost. Send me those two values and I'll bake them into `js/cloud-config.js`, so every device syncs automatically without anyone entering anything.
+
+**How it behaves**
+- Syncs on login, whenever something changes (every 20 s), when the tab regains focus, and when the connection comes back.
+- **Merging, not overwriting:** if he worked on two devices offline, both sets of results are combined — results are merged by id, gadget minutes/levels/attempts take the higher value, lessons read are unioned. No device can wipe another's work.
+- **Encrypted before upload (AES-256-GCM)**: the provider only stores unreadable ciphertext.
+- Offline still works fully; it syncs the next time there is a connection. A small ☁️ badge in the header shows the status.
+
 ## 🛡️ His progress survives every update
 
 **Website updates never touch his data.** The progress is stored in his browser under a fixed key (`lernportal_v1`); publishing new lessons, tests or features only replaces the *program*, never the *data*. This is verified: I made a code change, hard-reloaded like a real deploy, and his results, gadget minutes, lessons and levels came back byte-for-byte identical.

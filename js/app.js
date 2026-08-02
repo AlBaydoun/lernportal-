@@ -124,6 +124,7 @@ function save(){
       LAST_BACKUP = Date.now();
       backupNow('auto');
     }
+    if(typeof cloudTouch==='function') cloudTouch();   // schedule an online sync
   }catch(e){
     SAVE_FAILED = true;
     try{ backupNow('save-failed'); }catch(e2){}
@@ -151,6 +152,7 @@ function loginAs(id){
   VIEW = {name:'home', grade:VIEW.grade||4};
   document.getElementById('topbar').style.display = '';
   renderHome();
+  if(typeof cloudSync==='function') cloudSync('login').then(()=>{ if(VIEW.name==='home') renderHome(); });
 }
 function logoutUser(){
   LOGGED_IN = false;
