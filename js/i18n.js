@@ -55,6 +55,7 @@ const I18N = {
   password:{de:'Passwort',ru:'Пароль',en:'Password'},
   login:{de:'Anmelden',ru:'Войти',en:'Log in'},
   wrongPw:{de:'Falsches Passwort!',ru:'Неверный пароль!',en:'Wrong password!'},
+  adminReset:{de:'✅ Admin-Passwort zurückgesetzt auf: lise2026',ru:'✅ Пароль админа сброшен на: lise2026',en:'✅ Admin password reset to: lise2026'},
   adminPanel:{de:'Admin-Bereich',ru:'Панель админа',en:'Admin panel'},
   tab_results:{de:'📊 Ergebnisse',ru:'📊 Результаты',en:'📊 Results'},
   tab_attempts:{de:'🔓 Versuche',ru:'🔓 Попытки',en:'🔓 Attempts'},

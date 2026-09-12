@@ -13,6 +13,17 @@ function adminGate(){
 }
 function tryLogin(){
   const v = $('#pwInp').value;
+  /* Passwort vergessen: "reset:" + das Sync-Secret aus js/cloud-config.js eingeben
+     → Admin-Passwort wird auf den Anfangswert zurückgesetzt */
+  const secret = (typeof CLOUD_CONFIG!=='undefined' && CLOUD_CONFIG && CLOUD_CONFIG.secret) || '';
+  if(secret && v === 'reset:'+secret){
+    backupNow('before-admin-reset');
+    ROOT.adminPw = DEFAULT_ADMIN_HASH; save();
+    $('#pwErr').style.color='var(--green)';
+    $('#pwErr').textContent = t('adminReset');
+    $('#pwInp').value='';
+    return;
+  }
   if(pwHash(v)===ROOT.adminPw){ ADMIN_OK=true; closeModal(); VIEW={name:'admin'};
     document.getElementById('topbar').style.display=''; renderAdmin(); }
   else $('#pwErr').textContent = t('wrongPw');
