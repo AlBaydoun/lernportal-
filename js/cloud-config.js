@@ -1,16 +1,19 @@
-/* ============ CLOUD CONFIG ============
-   Diese Werte sind fest in die Website eingebaut: JEDES Gerät synchronisiert
-   damit automatisch. Es muss niemand mehr etwas eintippen.
+/* ============ CLOUD CONFIG (Hostinger / eigener Server) ============
+   Diese Werte sind fest in die Website eingebaut – JEDES Gerät
+   synchronisiert damit automatisch, niemand muss etwas eintippen.
 
-   url  = Supabase Project URL
-   key  = Supabase "Publishable"-Key (darf öffentlich sein – NIEMALS den Secret-Key!)
-   row  = geheime Kennung eures Datensatzes
-   pass = Passwort, mit dem die Daten IM BROWSER verschlüsselt werden,
-          bevor sie hochgeladen werden (Supabase sieht nur unlesbare Zeichen)
+   provider 'php'  = eigener Server mit sync.php (Hostinger)
+   url             = Adresse von sync.php.
+                     'sync.php'  = liegt im selben Ordner wie die Website (Hostinger)
+                     Wird die Website ZUSÄTZLICH auf github.io benutzt, hier die
+                     volle Adresse eintragen, z. B. 'https://deine-domain.de/lernportal/sync.php'
+   secret          = muss GENAU mit $SECRET in sync.php übereinstimmen
+   pass            = Verschlüsselungspasswort (Daten werden im Browser verschlüsselt,
+                     der Server sieht nur unlesbare Zeichen)
 */
 const CLOUD_CONFIG = {
-  url:  'https://pelbuttkpcdacrisuyqf.supabase.co',
-  key:  'sb_publishable_Aj0CgEpzoP79hfwX6ByTmg_KLrd1RpD',
-  row:  'baydoun-familie-lernportal-7c41f9',
-  pass: 'Timur-Lernportal-2026-7c41f9-Baydoun'
+  provider: 'php',
+  url:    'sync.php',
+  secret: 'Tm7-Lernportal-2026-K9p4Qx2vB8sL',
+  pass:   'Timur-Lernportal-2026-7c41f9-Baydoun'
 };

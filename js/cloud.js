@@ -14,7 +14,15 @@ function cloudCfg(){
   const baked = (typeof CLOUD_CONFIG !== 'undefined' && CLOUD_CONFIG && CLOUD_CONFIG.url) ? CLOUD_CONFIG : null;
   return baked || (ROOT && ROOT.cloud) || null;
 }
-function cloudOn(){ const c = cloudCfg(); return !!(c && c.url && c.key && c.row); }
+function cloudOn(){
+  const c = cloudCfg(); if(!c || !c.url) return false;
+  if(c.provider==='php') return !!c.secret;            // own server (Hostinger): url + secret
+  return !!(c.key && c.row);                            // Supabase: url + key + row
+}
+function phpUrl(c){
+  // relative address (e.g. "sync.php") = same folder as the website
+  return /^https?:/i.test(c.url) ? c.url : new URL(c.url, location.href).href;
+}
 
 /* ---------- encryption ---------- */
 async function aesKey(pass){
@@ -92,6 +100,13 @@ async function cloudRequest(method, extra){
 }
 async function cloudPull(){
   const c = cloudCfg(); if(!cloudOn()) return null;
+  if(c.provider==='php'){                               // own server (sync.php)
+    const r = await fetch(phpUrl(c), {headers:{'X-Secret':c.secret}, cache:'no-store'});
+    if(!r.ok) throw new Error('HTTP '+r.status);
+    const o = await r.json();
+    if(!o || o.empty || !o.payload) return null;
+    return { root: await decryptPayload(o.payload, c.pass || c.secret), at: o.updated_at };
+  }
   const r = await fetch(`${c.url.replace(/\/+$/,'')}/rest/v1/${CLOUD_TABLE}?id=eq.${encodeURIComponent(c.row)}&select=payload,updated_at`,
     {headers:{apikey:c.key, Authorization:'Bearer '+c.key}, cache:'no-store'});
   if(!r.ok) throw new Error('HTTP '+r.status);
@@ -101,6 +116,14 @@ async function cloudPull(){
 }
 async function cloudPush(root){
   const c = cloudCfg(); if(!cloudOn()) return;
+  if(c.provider==='php'){                               // own server (sync.php)
+    const payload = await encryptPayload(root, c.pass || c.secret);
+    const r = await fetch(phpUrl(c), {method:'POST',
+      headers:{'X-Secret':c.secret, 'Content-Type':'application/json'},
+      body: JSON.stringify({payload, updated_at:new Date().toISOString()})});
+    if(!r.ok) throw new Error('HTTP '+r.status+' '+(await r.text()).slice(0,120));
+    return;
+  }
   const payload = await encryptPayload(root, c.pass || c.key);
   const r = await fetch(`${c.url.replace(/\/+$/,'')}/rest/v1/${CLOUD_TABLE}`, {
     method:'POST',

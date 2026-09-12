@@ -2,15 +2,12 @@
 /* ============================================================
    Lernportal – Sync-Server für Hostinger (oder jedes PHP-Hosting)
    ------------------------------------------------------------
-   1. Trage unten bei $SECRET ein eigenes, langes Passwort ein.
-   2. Lade diese Datei per Dateimanager/FTP in den Ordner public_html
-      (oder public_html/lernportal) hoch.
-   3. Die Adresse lautet dann z. B.:
-        https://deine-domain.de/sync.php
-      Diese Adresse + das Secret trägst du im Admin-Bereich ein.
+   Diese Datei liegt im selben Ordner wie index.html.
+   $SECRET muss mit "secret" in js/cloud-config.js übereinstimmen.
 
    Die Datei speichert NUR verschlüsselte Daten – der Server sieht
-   den Inhalt nie im Klartext.
+   den Inhalt nie im Klartext. Die letzten 5 Stände werden als
+   Sicherung im Ordner lernportal-data/ aufbewahrt.
    ============================================================ */
 
 $SECRET = 'Tm7-Lernportal-2026-K9p4Qx2vB8sL';   /* identisch mit js/cloud-config.js */
